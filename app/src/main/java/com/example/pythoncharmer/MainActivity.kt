@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.pythoncharmer.navigation.AppNavigation
 import com.example.pythoncharmer.ui.theme.PythonCharmerTheme
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                //TODO hier kommt Navitagion Component
+                AppNavigation()
             }
         }
     }
@@ -26,23 +27,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp( content : @Composable () -> Unit ) {
     PythonCharmerTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            Greeting("Android")
-        }
+        content()
     }
-}
-
-
-
-
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
@@ -50,7 +36,7 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     PythonCharmerTheme {
         MyApp {
-            //TODO hier kommt Navitagion Component
+            AppNavigation()
         }
     }
 }
