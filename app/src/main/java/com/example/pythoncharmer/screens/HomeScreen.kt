@@ -20,6 +20,7 @@ import androidx.navigation.NavController
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import com.example.pythoncharmer.navigation.AppScreens
+import com.example.pythoncharmer.widgets.CardFace
 import com.example.pythoncharmer.widgets.singleTopic
 
 @Composable
@@ -71,7 +72,7 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        LazyColumn {
+       LazyColumn {
             items( topics ) { topic ->
                 singleTopic(topic = topic,
                     onClickItem1 = {
