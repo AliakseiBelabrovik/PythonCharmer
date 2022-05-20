@@ -1,5 +1,14 @@
 package com.example.pythoncharmer.models
 
+import android.net.Uri
+import android.os.Bundle
+import android.os.Parcelable
+
+import androidx.navigation.NavType
+import com.google.gson.Gson
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Topic (
     val id : Int,
     val title: String,
@@ -9,7 +18,27 @@ data class Topic (
     val studyLinks: List<String>,
     val multipleChoiceQuestions: List<String>,
     val singleChoiceQuestions: List<String>
-    )
+    ) : Parcelable {
+    override fun toString(): String {
+        return Uri.encode(Gson().toJson(this))
+    }
+    }
+
+class TopicType : NavType<Topic>(isNullableAllowed = false) {
+
+    override fun get(bundle: Bundle, key: String): Topic? {
+        return bundle.getParcelable( key )
+    }
+
+    override fun parseValue(value: String): Topic {
+        return Gson().fromJson( value, Topic::class.java )
+    }
+
+    override fun put(bundle: Bundle, key: String, value: Topic) {
+        bundle.putParcelable( key, value )
+    }
+
+}
 
 fun getTopics() : List<Topic> {
     return listOf(

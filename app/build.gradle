@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -67,4 +68,7 @@ dependencies {
 
     //Coil
     implementation "io.coil-kt:coil-compose:$coi_version"
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
 }

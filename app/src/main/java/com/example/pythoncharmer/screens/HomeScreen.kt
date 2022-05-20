@@ -65,7 +65,6 @@ fun HomeScreen(navController: NavController) {
 
 }
 
-
 @Composable
 fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
     Surface(
@@ -75,8 +74,14 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
         LazyColumn {
             items( topics ) { topic ->
                 singleTopic(topic = topic,
-                    onClickItem = { topicId -> navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")}
-                    )
+                    onClickItem1 = {
+                        topic -> navController.navigate("${AppScreens.MultipleChoiceExercise.value}/${topic}")
+                    }
+                    //onClickItem = { topicId -> navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")}
+
+                    ) { topicId ->
+                    navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")
+                }
             }
 
 

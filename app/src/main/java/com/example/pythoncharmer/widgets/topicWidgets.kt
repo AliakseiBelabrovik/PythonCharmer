@@ -1,5 +1,6 @@
 package com.example.pythoncharmer.widgets
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -22,10 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pythoncharmer.models.Topic
+import com.google.gson.Gson
 
 
 @Composable
-fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}, content: @Composable () -> Unit = {}) {
+fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem1 : ( Topic ) -> Unit = {}, onClickItem2 : ( Int ) -> Unit = {}) {
     var showHiddenInfo by remember {
         mutableStateOf(false)
     }
@@ -69,15 +71,14 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}, content: @Compo
 
                 Column() {
                     Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    Text(text = "Director: ${topic.title}", fontSize = 12.sp)
-                    Text(text = "Released: ${topic.complexityLevel}", fontSize = 12.sp)
-
+                    Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(5.dp))
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Button(
                             onClick = {
-                                onClickItem(topic.id)
+                                onClickItem2(topic.id)
                             },
                             border = BorderStroke(0.5.dp, Color.Red),
                             //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
@@ -88,7 +89,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}, content: @Compo
                         Spacer(modifier = Modifier.width(20.dp))
                         Button(
                             onClick = {
-                                //TODO
+                                onClickItem1(topic)
                             },
                             border = BorderStroke(0.5.dp, Color.Red),
                             //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
