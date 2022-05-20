@@ -12,6 +12,7 @@ fun AppNavigation() {
 
     NavHost(navController = navController, startDestination = AppScreens.HomeScreen.value) {
         composable(AppScreens.HomeScreen.value) { HomeScreen(navController = navController) }
+        //composable(AppScreens.TutorialScreen) {  }
     }
 
 

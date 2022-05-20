@@ -1,16 +1,19 @@
 package com.example.pythoncharmer.widgets
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,11 +27,14 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
     }
     Card(modifier = Modifier
         .padding(4.dp)
-        .fillMaxWidth()
+        .fillMaxWidth(),
         //.height(if (showHiddenInfo) 250.dp else 130.dp)
+            /*
         .clickable {
             onClickItem(topic.id)
         },
+
+             */
         shape = RoundedCornerShape(corner = CornerSize(16.dp)),
         elevation = 6.dp
     ) {
@@ -45,7 +51,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                     //shape = RectangleShape,
                     //elevation = 6.dp
                 ) {
-                    //Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
+                    Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
                     /*
                     AsyncImage(
                         model = movie.images[0],
@@ -60,6 +66,33 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                     Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(text = "Director: ${topic.title}", fontSize = 12.sp)
                     Text(text = "Released: ${topic.complexityLevel}", fontSize = 12.sp)
+
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Button(
+                            onClick = {
+                                onClickItem(topic.id)
+                            },
+                            border = BorderStroke(0.5.dp, Color.Red),
+                            //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                        ) {
+                          Text(text = "Study", color = Color.DarkGray)
+                        }
+                        Spacer(modifier = Modifier.width(20.dp))
+                        Button(
+                            onClick = {
+                                //TODO
+                            },
+                            border = BorderStroke(0.5.dp, Color.Red),
+                            //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                        ) {
+                            Text(text = "Test", color = Color.White)
+                        }
+                    }
+                    /*
                     AnimatedVisibility(
                         visible = showHiddenInfo
                     ) {
@@ -106,13 +139,20 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                             contentDescription = "Show hidden information",
                             modifier = Modifier.clickable { showHiddenInfo = !showHiddenInfo }
                         )
+
+                     */
                 }
+
+
             }
+            /*
             AnimatedVisibility(
                 visible = showFavoriteIcon
             ) {
                 content()
             }
+
+             */
         }
     }
 }
