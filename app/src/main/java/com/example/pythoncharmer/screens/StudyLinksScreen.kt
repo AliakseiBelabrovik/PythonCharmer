@@ -1,5 +1,8 @@
 package com.example.pythoncharmer.screens
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -53,7 +56,11 @@ fun MainContent(topic: Topic){
             Divider()
 
             Text(text = "awesome Topic", style = MaterialTheme.typography.h5)
-
+            LazyColumn(){
+                items(topic.studyLinks){
+                    Text("$it")
+                }
+            }
         }
     }
 }

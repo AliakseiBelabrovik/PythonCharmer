@@ -25,7 +25,7 @@ import com.example.pythoncharmer.models.Topic
 
 
 @Composable
-fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
+fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}, content: @Composable () -> Unit = {}) {
     var showHiddenInfo by remember {
         mutableStateOf(false)
     }
@@ -146,18 +146,19 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                         )
 
                      */
+                    AnimatedVisibility(
+                        visible = true
+                    ) {
+                        content()
+                    }
                 }
 
 
             }
-            /*
-            AnimatedVisibility(
-                visible = showFavoriteIcon
-            ) {
-                content()
-            }
 
-             */
+
+
+
         }
     }
 }
