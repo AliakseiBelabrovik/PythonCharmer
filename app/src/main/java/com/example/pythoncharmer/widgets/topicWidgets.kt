@@ -94,7 +94,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}, content: @Compo
                             //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
                         ) {
-                            Text(text = "Test", color = Color.White)
+                            Text(text = "Test", color = Color.DarkGray)
                         }
                     }
                     /*
