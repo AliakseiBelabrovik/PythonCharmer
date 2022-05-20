@@ -1,16 +1,20 @@
 package com.example.pythoncharmer.widgets
 
+import android.graphics.Color
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,7 +49,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                     //shape = RectangleShape,
                     //elevation = 6.dp
                 ) {
-                    //Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
+                    Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
                     /*
                     AsyncImage(
                         model = movie.images[0],
@@ -56,6 +60,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
 
                      */
                 }
+
                 Column() {
                     Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(text = "Director: ${topic.title}", fontSize = 12.sp)
@@ -64,10 +69,10 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                         visible = showHiddenInfo
                     ) {
                         Text(
-                            text = "Plot: ${movie.plot}", fontSize = 12.sp,
+                            text = "Topic Id: ${topic.id}", fontSize = 12.sp,
                         )
                     }
-                    AnimatedVisibility(
+                    /*AnimatedVisibility(
                         visible = showHiddenInfo) {
                         Divider(color = Color.LightGray, thickness = 1.dp,
                             modifier = Modifier.padding(2.dp)
@@ -93,7 +98,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                         Text(
                             text = "Rating: ${movie.rating}", fontSize = 12.sp,
                         )
-                    }
+                    }*/
                     if (showHiddenInfo)
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowUp,
@@ -107,12 +112,15 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                             modifier = Modifier.clickable { showHiddenInfo = !showHiddenInfo }
                         )
                 }
+
+
             }
+            /*
             AnimatedVisibility(
                 visible = showFavoriteIcon
             ) {
                 content()
-            }
+            }*/
         }
     }
 }
