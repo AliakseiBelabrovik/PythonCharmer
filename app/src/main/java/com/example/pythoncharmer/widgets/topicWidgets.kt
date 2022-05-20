@@ -10,6 +10,10 @@ import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.*
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +66,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
 
                      */
                 }
+
                 Column() {
                     Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     Text(text = "Director: ${topic.title}", fontSize = 12.sp)
@@ -97,10 +102,10 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                         visible = showHiddenInfo
                     ) {
                         Text(
-                            text = "Plot: ${movie.plot}", fontSize = 12.sp,
+                            text = "Topic Id: ${topic.id}", fontSize = 12.sp,
                         )
                     }
-                    AnimatedVisibility(
+                    /*AnimatedVisibility(
                         visible = showHiddenInfo) {
                         Divider(color = Color.LightGray, thickness = 1.dp,
                             modifier = Modifier.padding(2.dp)
@@ -126,7 +131,7 @@ fun singleTopic(topic: Topic, onClickItem: ( Int ) -> Unit = {}) {
                         Text(
                             text = "Rating: ${movie.rating}", fontSize = 12.sp,
                         )
-                    }
+                    }*/
                     if (showHiddenInfo)
                         Icon(
                             imageVector = Icons.Default.KeyboardArrowUp,
