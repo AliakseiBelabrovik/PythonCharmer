@@ -9,9 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,8 +18,7 @@ import androidx.navigation.NavController
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import com.example.pythoncharmer.navigation.AppScreens
-import com.example.pythoncharmer.widgets.CardFace
-import com.example.pythoncharmer.widgets.singleTopic
+import com.example.pythoncharmer.widgets.*
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -73,7 +70,8 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
         color = MaterialTheme.colors.background
     ) {
        LazyColumn {
-            items( topics ) { topic ->
+           /*
+           items( topics ) { topic ->
                 singleTopic(topic = topic,
                     onClickItem1 = {
                         topic -> navController.navigate("${AppScreens.MultipleChoiceExercise.value}/${topic}")
@@ -84,7 +82,25 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
                     navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")
                 }
             }
-
+            */
+           items( topics ) { topic ->
+              singleTopicHomeScreen(
+                  contentFront = {
+                      contentFront(topic = topic)
+                  },
+                  contentBack = {
+                      contentBack(
+                          topic = topic,
+                          onClickItem1 = {
+                              topic ->  navController.navigate("${AppScreens.MultipleChoiceExercise.value}/${topic}")
+                          },
+                          onClickItem2 = {
+                              topicId -> navController.navigate("${AppScreens.StudyLinksScreen.value}/${topicId}")
+                          }
+                      )
+                  }
+              )
+           }
 
            // topics.forEach { topic -> singleTopic(name = topic.title) }
         }

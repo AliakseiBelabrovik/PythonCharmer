@@ -19,7 +19,7 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = AppScreens.HomeScreen.value) {
         composable(AppScreens.HomeScreen.value) { HomeScreen(navController = navController) }
         composable(
-            route = AppScreens.StudylinksScreen.value+"/{TopicId}",// placeholder for arguments
+            route = AppScreens.StudyLinksScreen.value+"/{TopicId}",// placeholder for arguments
             arguments = listOf(navArgument(name = "TopicId"){   // define arguments that can be passed
                 type = NavType.IntType
             } ) ) { navBackStackEntry ->
