@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import androidx.compose.ui.platform.LocalDensity
+import com.example.pythoncharmer.models.Questions
 
 
 @Composable
@@ -180,7 +181,7 @@ fun contentFront(topic: Topic) {
 }
 
 @Composable
-fun contentBack(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem1 : ( Topic ) -> Unit = {}, onClickItem2 : ( Int ) -> Unit = {}) {
+fun contentBack(topic: Topic, questions: Questions, content: @Composable () -> Unit = {}, onClickItem1 : ( Topic, Questions ) -> Unit = { topic: Topic, questions: Questions -> }, onClickItem2 : (Int ) -> Unit = {}) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -228,7 +229,7 @@ fun contentBack(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem
                     Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         onClick = {
-                            onClickItem1(topic)
+                            onClickItem1(topic, questions)
                         },
                         border = BorderStroke(0.5.dp, Color.Red),
                         //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),

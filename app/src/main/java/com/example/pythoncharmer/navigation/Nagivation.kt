@@ -29,7 +29,7 @@ fun AppNavigation() {
             )
         }
         composable(
-            route= "${AppScreens.TestScreen.value}/{topic}",
+            route= "${AppScreens.TestScreen.value}/{topic}/{questions}",
             arguments = listOf(
                 navArgument(name = "topic") {
                     type = TopicType()

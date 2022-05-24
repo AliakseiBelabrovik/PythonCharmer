@@ -18,12 +18,12 @@ data class Topic (
     //val precedingTopic: String,
     //val followingTopic: String,
     val studyLinks: List<String>,
-    val questions: @RawValue List<Questions>,
+    val questions: @RawValue List<Question>,
     //val singleChoiceQuestions: List<String>
     ) : Parcelable {
-    override fun toString(): String {
-        return Uri.encode(Gson().toJson(this))
-    }
+        override fun toString(): String {
+            return Uri.encode(Gson().toJson(this))
+        }
     }
 
 class TopicType : NavType<Topic>(isNullableAllowed = false) {
@@ -39,7 +39,6 @@ class TopicType : NavType<Topic>(isNullableAllowed = false) {
     override fun put(bundle: Bundle, key: String, value: Topic) {
         bundle.putParcelable( key, value )
     }
-
 }
 
 fun getTopics() : List<Topic> {
