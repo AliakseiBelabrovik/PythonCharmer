@@ -9,7 +9,7 @@ import androidx.navigation.navArgument
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.TopicType
 import com.example.pythoncharmer.screens.HomeScreen
-import com.example.pythoncharmer.screens.MultipleChoiceExercise
+import com.example.pythoncharmer.screens.TestScreen
 import com.example.pythoncharmer.screens.StudyLinksScreen
 
 @Composable
@@ -29,14 +29,14 @@ fun AppNavigation() {
             )
         }
         composable(
-            route= "${AppScreens.MultipleChoiceExercise.value}/{topic}",
+            route= "${AppScreens.TestScreen.value}/{topic}",
             arguments = listOf(
                 navArgument(name = "topic") {
                     type = TopicType()
                 }
             )
         ) { navBackStackEntry ->
-            MultipleChoiceExercise(
+            TestScreen(
                 navController = navController,
                 topic = navBackStackEntry.arguments?.getParcelable<Topic>("topic")
             )

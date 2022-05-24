@@ -7,6 +7,8 @@ import android.os.Parcelable
 import androidx.navigation.NavType
 import com.google.gson.Gson
 import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+
 
 @Parcelize
 data class Topic (
@@ -16,7 +18,7 @@ data class Topic (
     //val precedingTopic: String,
     //val followingTopic: String,
     val studyLinks: List<String>,
-    val questions: List<Questions>,
+    val questions: @RawValue List<Questions>,
     //val singleChoiceQuestions: List<String>
     ) : Parcelable {
     override fun toString(): String {
