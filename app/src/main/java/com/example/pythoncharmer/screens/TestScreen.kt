@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pythoncharmer.models.Topic
 
 @Composable
-fun MultipleChoiceExercise(navController: NavController = rememberNavController(), topic : Topic?) {
+fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
 
     Scaffold(topBar = {
         TopAppBar() {
