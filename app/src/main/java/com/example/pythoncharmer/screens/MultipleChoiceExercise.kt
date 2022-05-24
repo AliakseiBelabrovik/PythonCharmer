@@ -45,4 +45,7 @@ fun MultipleChoiceExercise(navController: NavController = rememberNavController(
 @Composable
 fun MainContent( topic : Topic, navController: NavController ) {
     Text(text = "Hello ${topic.title}")
+    topic.questions.forEach { 
+        Text(text = "question${it.question}")
+    }
 }
