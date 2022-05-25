@@ -10,6 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.pythoncharmer.models.Topic
@@ -58,11 +62,31 @@ fun MainContent(topic: Topic){
 
             Divider()
 
-            Text(text = "${topic.title}", style = MaterialTheme.typography.h5)
+            Spacer(modifier = Modifier.padding(top = 15.dp))
+
+            Text(
+                text = topic.title,
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold)
+
+            Spacer(modifier = Modifier.padding(top = 10.dp))
+
+            Text(
+                text = topic.description,
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.Center,
+                fontStyle = FontStyle.Italic
+            )
+
             val uriHandler = LocalUriHandler.current
+
             LazyColumn(){
                 itemsIndexed(topic.studyLinks){index,item ->
-                    Text(modifier = Modifier.clickable { uriHandler.openUri("$item") }, text="Link ${index+1} ")
+                    Spacer(modifier = Modifier.padding(top = 15.dp))
+                    Text(modifier = Modifier.clickable {
+                        uriHandler.openUri("$item") },
+                        text="Link ${index+1} ", fontWeight = FontWeight.Bold
+                    )
                 }
             }
         }

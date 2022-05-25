@@ -15,9 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.pythoncharmer.models.Questions
 import com.example.pythoncharmer.models.Topic
-import com.example.pythoncharmer.models.getQuestionStates
 import com.example.pythoncharmer.models.getTopics
 import com.example.pythoncharmer.navigation.AppScreens
 import com.example.pythoncharmer.widgets.*
@@ -78,33 +76,23 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
                     onClickItem1 = {
                         topic -> navController.navigate("${AppScreens.MultipleChoiceExercise.value}/${topic}")
                     }
-                    //onClickItem = { topicId -> navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")}
+                    //onClickItem = { topicId -> navController.navigate(AppScreens.StudyLinksScreen.value +"/$topicId")}
 
                     ) { topicId ->
-                    navController.navigate(AppScreens.StudylinksScreen.value +"/$topicId")
+                    navController.navigate(AppScreens.StudyLinksScreen.value +"/$topicId")
                 }
             }
             */
            items( topics ) { topic ->
-              singleTopicHomeScreen(
+                singleTopicHomeScreen(
                   contentFront = {
                       contentFront(topic = topic)
                   },
                   contentBack = {
                       contentBack(
                           topic = topic,
-                          questions = Questions(
-                              getQuestionStates()
-                          ),
                           onClickItem1 = {
-                              topic, questions ->  navController.navigate("${AppScreens.TestScreen.value}/${topic}/${questions}")
-                              /*
-                                         topic: Topic, questions: Questions ->  run {
-                              navController.navigate("${AppScreens.TestScreen.value}/${topic}/${questions}")
-                          }
-
-                               */
-                                  //topic, questions ->  navController.navigate("${AppScreens.TestScreen.value}/${topic}/${questions}")
+                              topic ->  navController.navigate("${AppScreens.TestScreen.value}/${topic}")
                           },
                           onClickItem2 = {
                               topicId -> navController.navigate("${AppScreens.StudyLinksScreen.value}/${topicId}")
