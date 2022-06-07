@@ -1,6 +1,6 @@
 package com.example.pythoncharmer.models
 
-enum class Questiontype {
+enum class QuestionType {
     multipleChoice,
     singeleChoice
 }

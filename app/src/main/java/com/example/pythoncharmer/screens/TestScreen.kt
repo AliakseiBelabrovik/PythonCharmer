@@ -1,8 +1,10 @@
 package com.example.pythoncharmer.screens
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,10 +12,14 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -25,8 +31,10 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
             getQuestionStates()
         )
 
+        //questions have a list of questions states (= questions), so we set actual question to question with the current index
         val questionState = remember(questions.currentQuestionIndex) {
-            questions.questionsState[questions.currentQuestionIndex]
+            questions.questionsState[questions.currentQuestionIndex] //get questions state with the index
+            //and set it to val questionState
         }
         Scaffold(topBar = {
             TopAppBar() {
@@ -46,6 +54,14 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
         }) { innerPadding ->
             if (topic != null) {
                 //MainContent(topic = topic, navController = navController)
+                /*
+                 QuizTopAppBar(
+                    questionIndex = questionState.questionIndex,
+                    totalQuestionsCount = questionState.totalQuestions,
+                    onBackPressed = onBackPressed
+                )
+                 */
+
                 QuestionContent(
                     question = questionState.question,
                     selectedAnswer = questionState.givenAnswerId,
@@ -195,15 +211,55 @@ fun SingleChoiceQuestion(
 
         }
     }
-
-
-
-
-
-
-
-
-
 }
+
+/*
+
+@Composable
+private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPressed: () -> Unit) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth()) {
+            TopAppBarTitle(
+                questionIndex = questionIndex,
+                totalQuestionsCount = totalQuestionsCount,
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .align(Alignment.Center)
+            )
+
+            IconButton(
+                onClick = onBackPressed,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+                    .align(Alignment.CenterEnd)
+            ) {
+                Icon(
+                    Icons.Filled.Close,
+                    contentDescription = stringResource(id = R.string.asker_cancel_description),
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+        }
+
+        val animatedProgress by animateFloatAsState(
+            targetValue = (questionIndex + 1) / totalQuestionsCount.toFloat(),
+            animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+        )
+        LinearProgressIndicator(
+            progress = animatedProgress,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            backgroundColor = if (!isSystemInDarkTheme()) Color.Black.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.24f)
+        )
+    }
+}
+
+
+ */
+
+
+
 
 

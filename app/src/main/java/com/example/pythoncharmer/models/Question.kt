@@ -9,7 +9,7 @@ data class Question(
     val question: String,
     val correctAnswer: List<String>,
     val wrongAnswer: List<String>,
-    val questionType: Questiontype,
+    val questionType: QuestionType,
     val topic: Int
 ) {
 }
@@ -80,7 +80,7 @@ fun getQuestions() : List<Question> {
               "How do you insert COMMENTS in Python code?",
               listOf("#This is a comment"),
               listOf("//This is a comment","/*This is a comment","<!--This is a comment-->"),
-                Questiontype.singeleChoice,
+                QuestionType.singeleChoice,
                 1
             ),
             Question(
@@ -88,7 +88,7 @@ fun getQuestions() : List<Question> {
                 "What is correctly commented?",
                 listOf("\"\"\"print(\"Hello World!\")\"\"\"","#print(\"Hello World!\")"),
                 listOf("<!--print(\"Hello World!\")-->","//print(\"Hello World!\")"),
-                Questiontype.multipleChoice,
+                QuestionType.multipleChoice,
                 1
             ),
             Question(
@@ -96,7 +96,7 @@ fun getQuestions() : List<Question> {
                 "Testfrage",
                 listOf("ist richtig","auchRichtig","nohcmal Richtig"),
                 listOf("falsch"),
-                Questiontype.multipleChoice,
+                QuestionType.multipleChoice,
                 1
             ),
             Question(
@@ -108,7 +108,7 @@ fun getQuestions() : List<Question> {
                     "###myName = \"Neo\"\nmy_age = 37###",
                     "#myName = \"Neo\"\n#my_age = 37"
                 ),
-                Questiontype.multipleChoice,
+                QuestionType.multipleChoice,
                 1
             ),
             Question(
@@ -120,7 +120,7 @@ fun getQuestions() : List<Question> {
                     "Comments are non-executable statements in Python.",
                     "Python multi-line comment is a piece of text enclosed in a delimiter (“””) on each end of the comment"),
                 listOf(),
-                Questiontype.multipleChoice,
+                QuestionType.multipleChoice,
                 1
             ),
 
