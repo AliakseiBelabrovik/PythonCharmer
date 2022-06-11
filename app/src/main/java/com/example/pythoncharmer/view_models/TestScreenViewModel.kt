@@ -35,6 +35,9 @@ class TestScreenViewModel(
         }
     }
 
+    public fun fetchQuestionsByTopicId( topicId : Int ) {
+
+    }
 
 
 
