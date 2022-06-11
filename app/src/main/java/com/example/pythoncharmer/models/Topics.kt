@@ -49,7 +49,7 @@ fun getTopics() : List<Topic> {
             complexityLevel = "easy",
             studyLinks =listOf("https://www.w3schools.com/python/python_comments.asp",
                                "https://www.pythontutorial.net/python-basics/python-comments/"),
-            questions = getQuestions().filter { it.topic == 1 }
+            questions = listOf()
             ),
         Topic(
             id = 2,

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PythonCharmer</string>
+    <string name="asker_cancel_description">Cancel</string>
+    <string name="asker_title_totalquestions"> of %d</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.pythoncharmer.screens
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -7,67 +8,79 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.pythoncharmer.R
 import com.example.pythoncharmer.models.*
+import com.example.pythoncharmer.view_models.TestScreenViewModel
+import com.example.pythoncharmer.view_states.TestScreenViewState
 
 @Composable
 fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
-        val questions = Questions(
-            getQuestionStates()
-        )
 
-        //questions have a list of questions states (= questions), so we set actual question to question with the current index
-        val questionState = remember(questions.currentQuestionIndex) {
-            questions.questionsState[questions.currentQuestionIndex] //get questions state with the index
-            //and set it to val questionState
-        }
-        Scaffold(topBar = {
-            TopAppBar() {
-                Row {
-                    Icon(imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Arrow back",
-                        modifier = Modifier.clickable {
-                            navController.navigateUp()
-                            //navController.popBackStack()
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
+    val testScreenViewModel : TestScreenViewModel = viewModel()
+    val currentState: State<TestScreenViewState> = testScreenViewModel.viewState.collectAsState()
 
-                    Text(text = "Test to " + topic?.title ?: "")
-                }
-            }
-        }) { innerPadding ->
-            if (topic != null) {
-                //MainContent(topic = topic, navController = navController)
-                /*
-                 QuizTopAppBar(
-                    questionIndex = questionState.questionIndex,
-                    totalQuestionsCount = questionState.totalQuestions,
-                    onBackPressed = onBackPressed
+    //currentState.value.questionsX[0].givenAnswerId
+    //currentState.value.currentQuestionIndex
+
+    Scaffold(topBar = {
+        TopAppBar() {
+            Row {
+                Icon(imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Arrow back",
+                    modifier = Modifier.clickable {
+                        navController.navigateUp()
+                        //navController.popBackStack()
+                    }
                 )
-                 */
+                Spacer(modifier = Modifier.width(20.dp))
 
+                Text(text = "Test to " + topic?.title ?: "")
+            }
+        }
+    }) { innerPadding ->
+        if (topic != null) {
+            //MainContent(topic = topic, navController = navController)
+            /*
+             QuizTopAppBar(
+                questionIndex = questionState.questionIndex,
+                totalQuestionsCount = questionState.totalQuestions,
+                onBackPressed = onBackPressed
+            )
+             */
+            Column() {
+                QuizTopAppBar(
+                    questionIndex = currentState.value.currentQuestionIndex,
+                    totalQuestionsCount = currentState.value.questions.count()
+                ) {
+                    //TODO
+                }
                 QuestionContent(
-                    question = questionState.question,
-                    selectedAnswer = questionState.givenAnswerId,
-                    onAnswer = {
-                        questionState.givenAnswerId = it
-                        questionState.enableNext = true
+                    question = currentState.value.questions[currentState.value.currentQuestionIndex],
+                    selectedAnswer = currentState.value.questions[currentState.value.currentQuestionIndex].answers[0],
+                    onAnswer = { answerId ->
+                        currentState.value.questions[currentState.value.currentQuestionIndex].givenAnswerId = answerId
+                        Log.d("Changed answer",
+                            "The answer selected is " +
+                                    currentState.value.questions[currentState.value.currentQuestionIndex].answers[answerId].answerText)
+                        //questionState.enableNext = true
+                        //changes colors, change buttons?
                     },
                     modifier = Modifier
                         .fillMaxSize()
@@ -75,10 +88,20 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 )
             }
         }
-
+    }
 }
+
 /*
-content = { innerPadding ->
+ Surface(modifier = Modifier.supportWideScreen()) {
+        Scaffold(
+            topBar = {
+                QuizTopAppBar(
+                    questionIndex = questionState.questionIndex,
+                    totalQuestionsCount = questionState.totalQuestions,
+                    onBackPressed = onBackPressed
+                )
+            },
+            content = { innerPadding ->
                 QuestionContent(
                     question = questionState.question,
                     selectedAnswer = questionState.givenAnswerId,
@@ -91,13 +114,24 @@ content = { innerPadding ->
                         .padding(innerPadding)
                 )
             },
- */
+            bottomBar = {
+                NavigationButtons(
+                    questionState = questionState,
+                    onPreviousPressed = { questions.currentQuestionIndex-- },
+                    onNextPressed = { questions.currentQuestionIndex++ },
+                    onDonePressed = onDonePressed
+                )
+            }
+        )
+    }
+*/
+
 
 @Composable
 fun QuestionContent(
     question : Question,
-    selectedAnswer : String,
-    onAnswer: ( String ) -> Unit = {},
+    selectedAnswer : Answer,
+    onAnswer: ( Int ) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -106,12 +140,13 @@ fun QuestionContent(
     ) {
         item {
             Spacer(modifier = Modifier.height(32.dp))
-            QuestionTitle(questionTitle = question.question)
+            QuestionTitle(questionTitle = question.questionText)
             Spacer(modifier = Modifier.height(24.dp))
 
             SingleChoiceQuestion(
                 question = question,
-                selectedAnswer = selectedAnswer,
+                //selectedAnswerId = selectedAnswer.answerId,
+                selectedAnswerId = -1,
                 onAnswerSelected = { answer -> onAnswer(answer) },
                 modifier = Modifier.fillParentMaxWidth()
             )
@@ -148,23 +183,24 @@ fun QuestionTitle( questionTitle : String ) {
 @Composable
 fun SingleChoiceQuestion(
     question : Question,
-    selectedAnswer: String = "",
-    onAnswerSelected : (String) -> Unit = {},
+    selectedAnswerId: Int,
+    onAnswerSelected : (Int) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val radioOptions : List<String> = question.correctAnswer + question.wrongAnswer
-    val (selectedOption, onOptionSelected) = remember(selectedAnswer) {
-        mutableStateOf(selectedAnswer)
+    val radioOptions : List<Answer> = question.answers
+    val (selectedOption, onOptionSelected) = remember(selectedAnswerId) {
+        mutableStateOf(selectedAnswerId)
     }
 
     Column(modifier = modifier) {
         radioOptions.forEach { answer ->
             val onClickHandle = {
-                onOptionSelected("${radioOptions.indexOf(answer)}")
-                onAnswerSelected("${radioOptions.indexOf(answer)}")
+                onOptionSelected(answer.answerId)
+                //onOptionSelected(radioOptions.indexOf(answer))
+                onAnswerSelected(radioOptions.indexOf(answer))
             }
 
-            val optionSelected = "${radioOptions.indexOf(answer)}" == selectedOption
+            val optionSelected = radioOptions.indexOf(answer) == selectedOption
             val answerBorderColor = if (optionSelected) {
                 MaterialTheme.colors.primary.copy(alpha = 0.5f)
             } else {
@@ -195,7 +231,7 @@ fun SingleChoiceQuestion(
                 ) {
                     Text(
                         modifier = Modifier.weight(4f),
-                        text = answer
+                        text = answer.answerText
                     )
                     RadioButton(
                         modifier = Modifier.weight(1f),
@@ -213,7 +249,7 @@ fun SingleChoiceQuestion(
     }
 }
 
-/*
+
 
 @Composable
 private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPressed: () -> Unit) {
@@ -256,6 +292,68 @@ private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPr
     }
 }
 
+@Composable
+private fun TopAppBarTitle(questionIndex: Int, totalQuestionsCount: Int, modifier: Modifier = Modifier) {
+    val indexStyle = MaterialTheme.typography.caption.toSpanStyle().copy(
+        fontWeight = FontWeight.Bold
+    )
+    val totalStyle = MaterialTheme.typography.caption.toSpanStyle()
+    val text = buildAnnotatedString {
+        withStyle(style = indexStyle) {
+            append("${questionIndex + 1} ")
+        }
+        withStyle(style = totalStyle) {
+            append(stringResource(R.string.asker_title_totalquestions, totalQuestionsCount))
+        }
+    }
+    //src/main/res/values/strings.xml
+    Text(
+        text = text,
+        style = MaterialTheme.typography.caption,
+        modifier = modifier
+    )
+}
+/*
+@Composable
+private fun NavigationButtons(questionState: QuestionState, onPreviousPressed: () -> Unit, onNextPressed: () -> Unit, onDonePressed: () -> Unit) {
+    Surface(
+        elevation = 7.dp,
+        modifier = Modifier.fillMaxWidth() // .border(1.dp, MaterialTheme.colors.primary)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 20.dp)
+        ) {
+            if (questionState.showPrevious) {
+                OutlinedButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp),
+                    onClick = onPreviousPressed
+                ) {
+                    Text(text = stringResource(id = R.string.asker_nav_back))
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            Button(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp),
+                enabled = questionState.enableNext,
+                onClick = if (questionState.showDone)
+                    onDonePressed
+                else
+                    onNextPressed
+            ) {
+                if (questionState.showDone)
+                    Text(text = stringResource(id = R.string.asker_nav_finish))
+                else
+                    Text(text = stringResource(id = R.string.asker_nav_next))
+            }
+        }
+    }
+}
 
  */
 

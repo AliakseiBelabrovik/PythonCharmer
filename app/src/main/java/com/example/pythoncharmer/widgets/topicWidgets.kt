@@ -5,19 +5,12 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.*
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import androidx.compose.ui.platform.LocalDensity
-import com.example.pythoncharmer.models.Questions
+import com.example.pythoncharmer.models.Question
 
 
 @Composable
@@ -181,7 +174,11 @@ fun contentFront(topic: Topic) {
 }
 
 @Composable
-fun contentBack(topic: Topic, questions: Questions, content: @Composable () -> Unit = {}, onClickItem1 : ( Topic, Questions ) -> Unit = { topic: Topic, questions: Questions -> }, onClickItem2 : (Int ) -> Unit = {}) {
+fun contentBack(
+    topic: Topic, questions: List<Question>,
+    content: @Composable () -> Unit = {},
+    onClickItem1 : ( Topic ) -> Unit = {},
+    onClickItem2 : (Int ) -> Unit = {}) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -229,7 +226,7 @@ fun contentBack(topic: Topic, questions: Questions, content: @Composable () -> U
                     Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         onClick = {
-                            onClickItem1(topic, questions)
+                            onClickItem1(topic)
                         },
                         border = BorderStroke(0.5.dp, Color.Red),
                         //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
