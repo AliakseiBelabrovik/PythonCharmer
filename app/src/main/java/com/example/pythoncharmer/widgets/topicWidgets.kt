@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
@@ -14,8 +15,10 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,8 @@ import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import androidx.compose.ui.platform.LocalDensity
 import com.example.pythoncharmer.models.Question
+import androidx.compose.ui.res.painterResource
+import com.example.pythoncharmer.R
 
 
 @Composable
@@ -56,7 +61,14 @@ fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem
                     //shape = RectangleShape,
                     //elevation = 6.dp
                 ) {
-                    Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
+                    Image(
+                        painterResource(R.drawable.snake),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                            .clip(RoundedCornerShape(10.dp))
+                            .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
+                    ))
                     /*
                     AsyncImage(
                         model = movie.images[0],
@@ -69,8 +81,8 @@ fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem
                 }
 
                 Column() {
-                    Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                    Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 12.sp)
+                    Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                    Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 15.sp)
                     Spacer(modifier = Modifier.height(5.dp))
                     AnimatedVisibility(
                         visible = true
@@ -152,7 +164,14 @@ fun contentFront(topic: Topic) {
                 //shape = RectangleShape,
                 //elevation = 6.dp
             ) {
-                Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
+                Image(
+                    painterResource(R.drawable.snake),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
+                        ))
                 /*
                 AsyncImage(
                     model = movie.images[0],
@@ -165,8 +184,8 @@ fun contentFront(topic: Topic) {
             }
 
             Column() {
-                Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 12.sp)
+                Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 15.sp)
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
@@ -193,7 +212,14 @@ fun contentBack(
                 //shape = RectangleShape,
                 //elevation = 6.dp
             ) {
-                Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Profile picture")
+                Image(
+                    painterResource(R.drawable.snake),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp))
+                        .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
+                        ))
                 /*
                 AsyncImage(
                     model = movie.images[0],
@@ -206,9 +232,9 @@ fun contentBack(
             }
 
             Column() {
-                Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 12.sp)
-                Text(text = "Get to know the subject or challenge your knowledge", fontSize = 12.sp)
+                Text(text = topic.title, fontWeight = FontWeight.Bold, fontSize = 17.sp)
+                //Text(text = "Complexity level: ${topic.complexityLevel}", fontSize = 12.sp)
+                Text(text = "Get to know the subject or challenge your knowledge", fontSize = 14.sp)
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -217,22 +243,22 @@ fun contentBack(
                         onClick = {
                             onClickItem2(topic.id)
                         },
-                        border = BorderStroke(0.5.dp, Color.Red),
+                        border = BorderStroke(2.dp, Color.DarkGray),
                         //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red, backgroundColor = Color.LightGray)
                     ) {
-                        Text(text = "Study", color = Color.DarkGray)
+                        Text(text = "Study", color = Color.Black)
                     }
                     Spacer(modifier = Modifier.width(20.dp))
                     Button(
                         onClick = {
                             onClickItem1(topic)
                         },
-                        border = BorderStroke(0.5.dp, Color.Red),
+                        border = BorderStroke(2.dp, Color.DarkGray),
                         //colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red)
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Red, backgroundColor = Color.LightGray)
                     ) {
-                        Text(text = "Test", color = Color.DarkGray)
+                        Text(text = "Test", color = Color.Black)
                     }
                 }
             }

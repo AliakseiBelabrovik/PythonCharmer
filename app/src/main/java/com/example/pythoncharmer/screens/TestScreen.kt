@@ -12,6 +12,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +30,7 @@ import com.example.pythoncharmer.R
 import com.example.pythoncharmer.models.*
 import com.example.pythoncharmer.view_models.TestScreenViewModel
 import com.example.pythoncharmer.view_states.TestScreenViewState
+import com.example.pythoncharmer.models.Topic
 
 @Composable
 fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
