@@ -19,7 +19,7 @@ data class Topic (
     //val followingTopic: String,
     val description: String,
     val studyLinks: List<String>,
-    val questions: @RawValue List<Questions>,
+    val questions: @RawValue List<Question>,
     //val singleChoiceQuestions: List<String>
     ) : Parcelable {
     override fun toString(): String {
