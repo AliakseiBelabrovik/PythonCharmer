@@ -1,8 +1,10 @@
 package com.example.pythoncharmer.view_models
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pythoncharmer.models.InMemoryQuestionService
+import com.example.pythoncharmer.models.QuestionType
 import com.example.pythoncharmer.models.QuestionsXRepository
 import com.example.pythoncharmer.view_states.TestScreenViewState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +27,7 @@ class TestScreenViewModel(
     init {
         fetchQuestions()
     }
-    //now we need to update that state with the actual data we request
+
     private fun fetchQuestions() {
         viewModelScope.launch {
             val questions = questionsXRepository.fetchQuestions()
@@ -35,10 +37,37 @@ class TestScreenViewModel(
         }
     }
 
-    public fun fetchQuestionsByTopicId( topicId : Int ) {
-
+    fun fetchQuestionsByTopicId( topicId : Int ) {
+        viewModelScope.launch {
+            val questions = questionsXRepository.fetchQuestionsById( topicId = topicId );
+            _viewState.value = _viewState.value.copy(
+                questions = questions
+            )
+        }
     }
 
-
-
+    fun updateGivenAnswers( isChecked : Boolean, answerId : Int ) {
+        if (_viewState.value.questions[_viewState.value.currentQuestionIndex].questionType == QuestionType.multipleChoice) {
+            if (isChecked) {
+                _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.add(answerId)
+                Log.d("Adding the answer",
+                    "Adding the answer " +
+                            _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
+                Log.d("The given answers are",
+                    "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
+            } else if (_viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.contains(answerId)) {
+                _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.remove(answerId)
+                Log.d("Removing the answer",
+                    "Removing the answer " +
+                            _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
+                Log.d("The given answers are",
+                    "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
+            }
+        } else {
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerId = answerId
+            Log.d("Changed answer",
+                "The answer selected is " +
+                        _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
+        }
+    }
 }

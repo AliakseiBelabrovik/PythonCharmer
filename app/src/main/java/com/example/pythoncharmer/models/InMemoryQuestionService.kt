@@ -8,4 +8,10 @@ class InMemoryQuestionService : QuestionsXRepository {
     override suspend fun fetchQuestions(): List<Question> {
         return questionsTopicComments
     }
+
+    override suspend fun fetchQuestionsById(topicId: Int): List<Question> {
+        return allQuestions.filter { question -> question.topicId == topicId }
+    }
+
+
 }

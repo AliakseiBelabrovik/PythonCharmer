@@ -14,4 +14,5 @@ data class TestScreenViewState(
     val questions : List<Question> = emptyList()
 ) {
     var currentQuestionIndex by mutableStateOf( 0 )
+    var numberCorrectAnsweredQuestions by mutableStateOf(0) //to count
 }

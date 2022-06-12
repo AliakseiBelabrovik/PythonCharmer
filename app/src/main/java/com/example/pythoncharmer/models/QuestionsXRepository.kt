@@ -8,4 +8,6 @@ package com.example.pythoncharmer.models
 interface QuestionsXRepository {
 
     suspend fun fetchQuestions() : List<Question>
+
+    suspend fun fetchQuestionsById( topicId : Int ) : List<Question>
 }

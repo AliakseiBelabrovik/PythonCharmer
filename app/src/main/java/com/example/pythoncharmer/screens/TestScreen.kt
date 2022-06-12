@@ -36,6 +36,9 @@ import com.example.pythoncharmer.models.Topic
 fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
 
     val testScreenViewModel : TestScreenViewModel = viewModel()
+    if ( topic != null ) {
+        testScreenViewModel.fetchQuestionsByTopicId( topicId = topic.id )
+    }
     val currentState: State<TestScreenViewState> = testScreenViewModel.viewState.collectAsState()
 
     //currentState.value.questionsX[0].givenAnswerId
@@ -75,12 +78,11 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 }
                 QuestionContent(
                     question = currentState.value.questions[currentState.value.currentQuestionIndex],
-                    selectedAnswer = currentState.value.questions[currentState.value.currentQuestionIndex].answers[0],
-                    onAnswer = { answerId ->
-                        currentState.value.questions[currentState.value.currentQuestionIndex].givenAnswerId = answerId
-                        Log.d("Changed answer",
-                            "The answer selected is " +
-                                    currentState.value.questions[currentState.value.currentQuestionIndex].answers[answerId].answerText)
+                    onAnswer = { isChecked, answerId ->
+                        testScreenViewModel.updateGivenAnswers(
+                            isChecked = isChecked,
+                            answerId = answerId
+                        )
                         //questionState.enableNext = true
                         //changes colors, change buttons?
                     },
@@ -126,14 +128,13 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
             }
         )
     }
-*/
+*
 
-
+ */
 @Composable
 fun QuestionContent(
     question : Question,
-    selectedAnswer : Answer,
-    onAnswer: ( Int ) -> Unit = {},
+    onAnswer: ( Boolean, Int ) -> Unit = { b: Boolean, i: Int -> },
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -145,13 +146,21 @@ fun QuestionContent(
             QuestionTitle(questionTitle = question.questionText)
             Spacer(modifier = Modifier.height(24.dp))
 
-            SingleChoiceQuestion(
-                question = question,
-                //selectedAnswerId = selectedAnswer.answerId,
-                selectedAnswerId = -1,
-                onAnswerSelected = { answer -> onAnswer(answer) },
-                modifier = Modifier.fillParentMaxWidth()
-            )
+            if(question.questionType == QuestionType.singeleChoice) {
+                SingleChoiceQuestion(
+                    question = question,
+                    selectedAnswerId = -1,
+                    onAnswerSelected = { isChecked, answerId -> onAnswer( isChecked, answerId) },
+                    modifier = Modifier.fillParentMaxWidth()
+                )
+            } else {
+                MultipleChoiceQuestion(
+                    question = question,
+                    selectedAnswerId = -1,
+                    onAnswerSelected = { isChecked, answerId -> onAnswer( isChecked, answerId) },
+                    modifier = Modifier.fillParentMaxWidth()
+                )
+            }
         }
     }
 }
@@ -186,7 +195,7 @@ fun QuestionTitle( questionTitle : String ) {
 fun SingleChoiceQuestion(
     question : Question,
     selectedAnswerId: Int,
-    onAnswerSelected : (Int) -> Unit = {},
+    onAnswerSelected : (Boolean, Int) -> Unit = { b: Boolean, i: Int -> },
     modifier: Modifier = Modifier
 ) {
     val radioOptions : List<Answer> = question.answers
@@ -199,7 +208,7 @@ fun SingleChoiceQuestion(
             val onClickHandle = {
                 onOptionSelected(answer.answerId)
                 //onOptionSelected(radioOptions.indexOf(answer))
-                onAnswerSelected(radioOptions.indexOf(answer))
+                onAnswerSelected(true, radioOptions.indexOf(answer))
             }
 
             val optionSelected = radioOptions.indexOf(answer) == selectedOption
@@ -243,15 +252,86 @@ fun SingleChoiceQuestion(
                             selectedColor = MaterialTheme.colors.primary
                         )
                     )
-
                 }
             }
-
         }
     }
 }
 
+@Composable
+fun MultipleChoiceQuestion(
+    question : Question,
+    selectedAnswerId: Int,
+    onAnswerSelected : (Boolean, Int) -> Unit = { b: Boolean, i: Int -> },
+    modifier: Modifier = Modifier
+) {
+    //wenn btn check geklickt wird und wenn multiple, dann wird die liste der given antworten
+    //geleert und mit jenen antworten befüllt, die gerade ausgewählt wurden
 
+    Column(modifier = modifier) {
+        question.answers.forEach { item ->
+            val isChecked = remember { mutableStateOf(false) }
+
+            val (selectedOption, onOptionSelected) = remember(selectedAnswerId) {
+                mutableStateOf(selectedAnswerId)
+            }
+            val onClickHandle = {
+                onOptionSelected(item.answerId)
+                //onOptionSelected(radioOptions.indexOf(answer))
+                onAnswerSelected(isChecked.value, question.answers.indexOf(item))
+            }
+
+            val answerBorderColor = if (isChecked.value) {
+                MaterialTheme.colors.primary.copy(alpha = 0.5f)
+            } else {
+                MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
+            }
+            val answerBackgroundColor = if (isChecked.value) {
+                MaterialTheme.colors.primary.copy(alpha = 0.12f)
+            } else {
+                MaterialTheme.colors.background
+            }
+            Surface(
+                shape = MaterialTheme.shapes.small,
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = answerBorderColor
+                ),
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .selectable(
+                            selected = isChecked.value,
+                            onClick = {
+                                isChecked.value = !isChecked.value
+                                onClickHandle()
+                            }
+                        )
+                        .background(answerBackgroundColor)
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.weight(4f),
+                        text = item.answerText
+                    )
+                    Checkbox(
+                        checked = isChecked.value,
+                        onCheckedChange = {
+                            if (it) {
+                                onClickHandle()
+                            }
+                            isChecked.value = it
+                        },
+                        enabled = true,
+                        colors = CheckboxDefaults.colors(MaterialTheme.colors.primary)
+                    )
+                }
+            }
+        }
+    }
+}
 
 @Composable
 private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPressed: () -> Unit) {
