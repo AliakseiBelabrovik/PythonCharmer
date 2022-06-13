@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,8 +29,29 @@ import com.example.pythoncharmer.models.getTopics
 import androidx.compose.ui.platform.LocalDensity
 import com.example.pythoncharmer.models.Question
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.pythoncharmer.R
 
+
+@Preview(showBackground = true)
+@Composable
+fun FavoriteIcon(
+    topic: Topic = getTopics()[0],
+    isFav: Boolean = false,
+    onFavClicked: (Topic) -> Unit = {},
+){
+    IconButton(
+        modifier = Modifier.width(80.dp),
+        onClick = { onFavClicked(topic) }
+    ) {
+        Icon(
+            tint = MaterialTheme.colors.secondary,
+            imageVector =
+            if (isFav) Icons.Default.Favorite
+            else Icons.Default.FavoriteBorder,
+            contentDescription = "add to Topics")
+    }
+}
 
 @Composable
 fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem1 : ( Topic ) -> Unit = {}, onClickItem2 : ( Int ) -> Unit = {}) {
@@ -195,9 +218,9 @@ fun contentFront(topic: Topic) {
 @Composable
 fun contentBack(
     topic: Topic, questions: List<Question>,
-    content: @Composable () -> Unit = {},
     onClickItem1 : ( Topic ) -> Unit = {},
-    onClickItem2 : (Int ) -> Unit = {}) {
+    onClickItem2 : (Int ) -> Unit = {},
+    content: @Composable () -> Unit = {}) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -260,8 +283,10 @@ fun contentBack(
                     ) {
                         Text(text = "Test", color = Color.Black)
                     }
+                    content()
                 }
             }
+
         }
     }
 }
@@ -270,7 +295,8 @@ fun contentBack(
 @Composable
 fun singleTopicHomeScreen(
     contentFront: @Composable () -> Unit = {},
-    contentBack: @Composable () -> Unit = {}
+    contentBack: @Composable () -> Unit = {},
+    content: @Composable () -> Unit = {}
 ) {
     var cardFace by remember {
         mutableStateOf(CardFace.Front)

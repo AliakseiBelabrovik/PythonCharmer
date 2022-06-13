@@ -18,10 +18,11 @@ import androidx.navigation.NavController
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import com.example.pythoncharmer.navigation.AppScreens
+import com.example.pythoncharmer.view_models.BookMarksViewModel
 import com.example.pythoncharmer.widgets.*
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, viewModel: BookMarksViewModel) {
     var showMenu by remember {
         mutableStateOf(false)
     }
@@ -58,13 +59,13 @@ fun HomeScreen(navController: NavController) {
         }
     ) {
         //MainContent(getTopics(), navController = navController, favViewModel = viewModel)
-        HomeScreenContent(getTopics(), navController = navController)
+        HomeScreenContent(getTopics(), navController = navController, bookMarksViewModel = viewModel)
     }
 
 }
 
 @Composable
-fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
+fun HomeScreenContent(topics : List<Topic>, navController: NavController, bookMarksViewModel: BookMarksViewModel) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -105,7 +106,18 @@ fun HomeScreenContent(topics : List<Topic>, navController: NavController) {
                           onClickItem2 = {
                               topicId -> navController.navigate("${AppScreens.StudyLinksScreen.value}/${topicId}")
                           }
-                      )
+                      ){
+                          FavoriteIcon(
+                              topic = topic,
+                              isFav = bookMarksViewModel.isFavorite(topic)
+                          ){ m ->
+                              if(bookMarksViewModel.isFavorite(m)){
+                                  bookMarksViewModel.removeFromBookMarks(m)
+                              } else {
+                                  bookMarksViewModel.addToBookMarks(m)
+                              }
+                          }
+                      }
                   }
               )
            }
