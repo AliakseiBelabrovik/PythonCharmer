@@ -3,6 +3,7 @@ package com.example.pythoncharmer.view_models
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pythoncharmer.models.FeedbackColor
 import com.example.pythoncharmer.models.InMemoryQuestionService
 import com.example.pythoncharmer.models.QuestionType
 import com.example.pythoncharmer.models.QuestionsXRepository
@@ -64,10 +65,38 @@ class TestScreenViewModel(
                     "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
             }
         } else {
-            _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerId = answerId
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.clear()
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.add(answerId)
             Log.d("Changed answer",
                 "The answer selected is " +
                         _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
+            Log.d("The given answers are",
+                "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
+        }
+    }
+
+    fun goToNextQuestion() {
+        val lastQuestionIndex = _viewState.value.questions.lastIndex
+        val currentIndex = _viewState.value.currentQuestionIndex
+        if (currentIndex < lastQuestionIndex) {
+            if(lastQuestionIndex - currentIndex == 1) {
+                _viewState.value.lastQuestion = true
+            }
+            Log.d("Go Next Question", "Going from " + currentIndex + " to " + currentIndex +1)
+            _viewState.value.currentQuestionIndex = _viewState.value.currentQuestionIndex + 1
+        }
+
+    }
+
+    fun checkIfCorrect() {
+        if (_viewState.value.questions[_viewState.value.currentQuestionIndex].correctAnswerId.containsAll(
+                _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds
+            )
+        ) {
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].enableNext = true
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "GREEN"
+        } else {
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "RED"
         }
     }
 }

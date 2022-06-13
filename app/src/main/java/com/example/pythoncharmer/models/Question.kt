@@ -12,9 +12,9 @@ data class Question(
     val questionType: QuestionType,
     val topicId: Int
 ) {
-    var givenAnswerId by mutableStateOf(0)
     var givenAnswerIds by mutableStateOf(arrayListOf<Int>())
     var enableNext by mutableStateOf(false)
+    var feedbackColor by mutableStateOf("NEUTRAL")
 }
 
 val questionsTopicComments = listOf(
@@ -79,10 +79,10 @@ val questionsTopicVariables = listOf(
         listOf<Answer>(
             Answer("var1.4", 0),
             Answer("var_2", 1),
-            Answer("2var", 2),
-            Answer("return", 3),
+            Answer("return", 2),
+            Answer("2var", 3),
             Answer("v2ar", 4),
-            Answer("var2", 5),
+            Answer("var2", 5)
         ),
         listOf(1, 4, 5),
         QuestionType.multipleChoice,

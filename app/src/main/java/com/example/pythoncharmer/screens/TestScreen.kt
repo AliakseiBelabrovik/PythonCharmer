@@ -59,40 +59,60 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 Text(text = "Test to " + topic?.title ?: "")
             }
         }
-    }) { innerPadding ->
-        if (topic != null) {
-            //MainContent(topic = topic, navController = navController)
-            /*
-             QuizTopAppBar(
-                questionIndex = questionState.questionIndex,
-                totalQuestionsCount = questionState.totalQuestions,
-                onBackPressed = onBackPressed
-            )
-             */
-            Column() {
-                QuizTopAppBar(
-                    questionIndex = currentState.value.currentQuestionIndex,
-                    totalQuestionsCount = currentState.value.questions.count()
-                ) {
-                    //TODO
-                }
-                QuestionContent(
-                    question = currentState.value.questions[currentState.value.currentQuestionIndex],
-                    onAnswer = { isChecked, answerId ->
-                        testScreenViewModel.updateGivenAnswers(
-                            isChecked = isChecked,
-                            answerId = answerId
-                        )
-                        //questionState.enableNext = true
-                        //changes colors, change buttons?
-                    },
-                    modifier = Modifier
+    },
+        content = { innerPadding ->
+            if (topic != null) {
+                //MainContent(topic = topic, navController = navController)
+                /*
+                 QuizTopAppBar(
+                    questionIndex = questionState.questionIndex,
+                    totalQuestionsCount = questionState.totalQuestions,
+                    onBackPressed = onBackPressed
+                )
+                 */
+                Column() {
+                    QuizTopAppBar(
+                        questionIndex = currentState.value.currentQuestionIndex,
+                        totalQuestionsCount = currentState.value.questions.count()
+                    ) {
+                        //TODO
+                    }
+
+                    QuestionContent(
+                        question = currentState.value.questions[currentState.value.currentQuestionIndex],
+                        onAnswer = { isChecked, answerId ->
+                            testScreenViewModel.updateGivenAnswers(
+                                isChecked = isChecked,
+                                answerId = answerId
+                            )
+                            //questionState.enableNext = true
+                            //changes colors, change buttons?
+                        },
+                        modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                )
+                    )
+                }
+            }
+        },
+        bottomBar = {
+            NavigationButtons(
+                enableNext = currentState.value.questions[currentState.value.currentQuestionIndex].enableNext,
+                showDone = currentState.value.lastQuestion && currentState.value.questions[currentState.value.currentQuestionIndex].enableNext,
+                question = currentState.value.questions[currentState.value.currentQuestionIndex],
+                onCheckPressed = {
+                    testScreenViewModel.checkIfCorrect()
+                },
+                onNextPressed = {
+                    testScreenViewModel.goToNextQuestion()
+                    Log.d( "After pressing next", "The current question is now: " + currentState.value.questions[currentState.value.currentQuestionIndex].questionText )
+                }) {
+                //TODO on don't know pressed
             }
         }
-    }
+
+
+    )
 }
 
 /*
@@ -143,7 +163,7 @@ fun QuestionContent(
     ) {
         item {
             Spacer(modifier = Modifier.height(32.dp))
-            QuestionTitle(questionTitle = question.questionText)
+            QuestionTitle(questionTitle = question.questionText, question.feedbackColor)
             Spacer(modifier = Modifier.height(24.dp))
 
             if(question.questionType == QuestionType.singeleChoice) {
@@ -167,17 +187,24 @@ fun QuestionContent(
 
 
 @Composable
-fun QuestionTitle( questionTitle : String ) {
+fun QuestionTitle( questionTitle : String, feedbackColor : String ) {
     val colorBackground = if (MaterialTheme.colors.isLight) {
         MaterialTheme.colors.onSurface.copy(alpha = 0.04f)
     } else {
         MaterialTheme.colors.onSurface.copy(alpha = 0.06f)
     }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = colorBackground,
+                color = if (feedbackColor == "GREEN") {
+                    Color.Green.copy(alpha = 0.5f)
+                } else if (feedbackColor == "RED") {
+                    Color.Red.copy(alpha = 0.5f)
+                } else {
+                    colorBackground
+                },
                 shape = MaterialTheme.shapes.small
             )
     ) {
@@ -213,12 +240,20 @@ fun SingleChoiceQuestion(
 
             val optionSelected = radioOptions.indexOf(answer) == selectedOption
             val answerBorderColor = if (optionSelected) {
-                MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                if (question.feedbackColor == "GREEN") {
+                    Color.Green.copy(alpha = 0.5f)
+                } else {
+                    MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                }
             } else {
                 MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
             }
             val answerBackgroundColor = if (optionSelected) {
-                MaterialTheme.colors.primary.copy(alpha = 0.12f)
+                if (question.feedbackColor == "GREEN") {
+                    Color.Green.copy(alpha = 0.12f)
+                } else {
+                    MaterialTheme.colors.primary.copy(alpha = 0.12f)
+                }
             } else {
                 MaterialTheme.colors.background
             }
@@ -282,12 +317,20 @@ fun MultipleChoiceQuestion(
             }
 
             val answerBorderColor = if (isChecked.value) {
-                MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                if (question.feedbackColor == "GREEN") {
+                    Color.Green.copy(alpha = 0.5f)
+                } else {
+                    MaterialTheme.colors.primary.copy(alpha = 0.5f)
+                }
             } else {
                 MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
             }
             val answerBackgroundColor = if (isChecked.value) {
-                MaterialTheme.colors.primary.copy(alpha = 0.12f)
+                if (question.feedbackColor == "GREEN") {
+                    Color.Green.copy(alpha = 0.12f)
+                } else {
+                    MaterialTheme.colors.primary.copy(alpha = 0.12f)
+                }
             } else {
                 MaterialTheme.colors.background
             }
@@ -395,9 +438,16 @@ private fun TopAppBarTitle(questionIndex: Int, totalQuestionsCount: Int, modifie
         modifier = modifier
     )
 }
-/*
+
 @Composable
-private fun NavigationButtons(questionState: QuestionState, onPreviousPressed: () -> Unit, onNextPressed: () -> Unit, onDonePressed: () -> Unit) {
+private fun NavigationButtons(
+    enableNext : Boolean,
+    showDone : Boolean,
+    question: Question,
+    onCheckPressed: () -> Unit,
+    onNextPressed: () -> Unit,
+    onDontKnowPressed: () -> Unit
+) {
     Surface(
         elevation = 7.dp,
         modifier = Modifier.fillMaxWidth() // .border(1.dp, MaterialTheme.colors.primary)
@@ -407,37 +457,36 @@ private fun NavigationButtons(questionState: QuestionState, onPreviousPressed: (
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 20.dp)
         ) {
-            if (questionState.showPrevious) {
-                OutlinedButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(48.dp),
-                    onClick = onPreviousPressed
-                ) {
-                    Text(text = stringResource(id = R.string.asker_nav_back))
-                }
-                Spacer(modifier = Modifier.width(16.dp))
+            OutlinedButton(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(48.dp),
+                enabled = !enableNext,
+                onClick = onCheckPressed
+            ) {
+                Text(text = stringResource(id = R.string.asker_check_button))
             }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
             Button(
                 modifier = Modifier
                     .weight(1f)
                     .height(48.dp),
-                enabled = questionState.enableNext,
-                onClick = if (questionState.showDone)
-                    onDonePressed
+                enabled = !showDone,
+                onClick = if (!question.enableNext)
+                    onDontKnowPressed
                 else
                     onNextPressed
             ) {
-                if (questionState.showDone)
-                    Text(text = stringResource(id = R.string.asker_nav_finish))
+                if (question.enableNext)
+                    Text(text = stringResource(id = R.string.asker_nav_next_question))
                 else
-                    Text(text = stringResource(id = R.string.asker_nav_next))
+                    Text(text = stringResource(id = R.string.asker_dont_know))
             }
         }
     }
 }
-
- */
 
 
 

@@ -2,4 +2,7 @@
     <string name="app_name">PythonCharmer</string>
     <string name="asker_cancel_description">Cancel</string>
     <string name="asker_title_totalquestions"> of %d</string>
+    <string name="asker_dont_know">Don\'t know</string>
+    <string name="asker_nav_next_question">Next</string>
+    <string name="asker_check_button">Check</string>
 </resources>
