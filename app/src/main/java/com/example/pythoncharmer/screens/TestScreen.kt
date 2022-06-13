@@ -110,8 +110,6 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 //TODO on don't know pressed
             }
         }
-
-
     )
 }
 

@@ -90,7 +90,8 @@ class TestScreenViewModel(
     fun checkIfCorrect() {
         if (_viewState.value.questions[_viewState.value.currentQuestionIndex].correctAnswerId.containsAll(
                 _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds
-            )
+            ) && _viewState.value.questions[_viewState.value.currentQuestionIndex].correctAnswerId.size
+            == _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.size
         ) {
             _viewState.value.questions[_viewState.value.currentQuestionIndex].enableNext = true
             _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "GREEN"
