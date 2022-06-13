@@ -15,12 +15,9 @@ data class Topic (
     val id : Int,
     val title: String,
     val complexityLevel: String,
-    //val precedingTopic: String,
-    //val followingTopic: String,
     val description: String,
     val studyLinks: List<String>,
     val questions: @RawValue List<Question>,
-    //val singleChoiceQuestions: List<String>
     ) : Parcelable {
     override fun toString(): String {
         return Uri.encode(Gson().toJson(this))

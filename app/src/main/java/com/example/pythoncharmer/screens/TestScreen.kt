@@ -1,6 +1,5 @@
 package com.example.pythoncharmer.screens
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -41,9 +40,6 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
         testScreenViewModel.fetchQuestionsByTopicId( topicId = topic.id )
     }
     val currentState: State<TestScreenViewState> = testScreenViewModel.viewState.collectAsState()
-
-    //currentState.value.questionsX[0].givenAnswerId
-    //currentState.value.currentQuestionIndex
 
     Scaffold(topBar = {
         TopAppBar() {
@@ -194,7 +190,6 @@ fun SingleChoiceQuestion(
         radioOptions.forEach { answer ->
             val onClickHandle = {
                 onOptionSelected(answer.answerId)
-                //onOptionSelected(radioOptions.indexOf(answer))
                 onAnswerSelected(true, radioOptions.indexOf(answer))
             }
 
@@ -273,9 +268,6 @@ fun MultipleChoiceQuestion(
     onAnswerSelected : (Boolean, Int) -> Unit = { b: Boolean, i: Int -> },
     modifier: Modifier = Modifier
 ) {
-    //wenn btn check geklickt wird und wenn multiple, dann wird die liste der given antworten
-    //geleert und mit jenen antworten befüllt, die gerade ausgewählt wurden
-
     Column(modifier = modifier) {
         question.answers.forEach { item ->
             val isChecked = remember { mutableStateOf(false) }

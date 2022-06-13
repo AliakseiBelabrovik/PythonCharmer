@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.*
@@ -55,19 +54,10 @@ fun FavoriteIcon(
 
 @Composable
 fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem1 : ( Topic ) -> Unit = {}, onClickItem2 : ( Int ) -> Unit = {}) {
-    var showHiddenInfo by remember {
-        mutableStateOf(false)
-    }
+
     Card(modifier = Modifier
         .padding(4.dp)
         .fillMaxWidth(),
-        //.height(if (showHiddenInfo) 250.dp else 130.dp)
-            /*
-        .clickable {
-            onClickItem(topic.id)
-        },
-
-             */
         shape = RoundedCornerShape(corner = CornerSize(16.dp)),
         elevation = 6.dp
     ) {
@@ -92,15 +82,6 @@ fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem
                             .clip(RoundedCornerShape(10.dp))
                             .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
                     ))
-                    /*
-                    AsyncImage(
-                        model = movie.images[0],
-                        contentDescription = "Movie poster",
-                        modifier = Modifier.clip(CircleShape),
-                        contentScale = ContentScale.Crop,
-                    )
-
-                     */
                 }
 
                 Column() {
@@ -112,60 +93,7 @@ fun singleTopic(topic: Topic,  content: @Composable () -> Unit = {}, onClickItem
                     ) {
                         content()
                     }
-
-                    /*
-                    AnimatedVisibility(
-                        visible = showHiddenInfo
-                    ) {
-                        Text(
-                            text = "Topic Id: ${topic.id}", fontSize = 12.sp,
-                        )
-                    }
-                    /*AnimatedVisibility(
-                        visible = showHiddenInfo) {
-                        Divider(color = Color.LightGray, thickness = 1.dp,
-                            modifier = Modifier.padding(2.dp)
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = showHiddenInfo
-                    ) {
-                        Text(
-                            text = "Genre: ${movie.genre}", fontSize = 12.sp,
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = showHiddenInfo
-                    ) {
-                        Text(
-                            text = "Actors: ${movie.actors}", fontSize = 12.sp,
-                        )
-                    }
-                    AnimatedVisibility(
-                        visible = showHiddenInfo
-                    ) {
-                        Text(
-                            text = "Rating: ${movie.rating}", fontSize = 12.sp,
-                        )
-                    }*/
-                    if (showHiddenInfo)
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Hide additional information",
-                            modifier = Modifier.clickable { showHiddenInfo = !showHiddenInfo }
-                        )
-                    else
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Show hidden information",
-                            modifier = Modifier.clickable { showHiddenInfo = !showHiddenInfo }
-                        )
-
-                     */
-
                 }
-
-
             }
         }
     }
@@ -195,15 +123,6 @@ fun contentFront(topic: Topic) {
                         .clip(RoundedCornerShape(10.dp))
                         .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
                         ))
-                /*
-                AsyncImage(
-                    model = movie.images[0],
-                    contentDescription = "Movie poster",
-                    modifier = Modifier.clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
-
-                 */
             }
 
             Column() {
@@ -232,8 +151,6 @@ fun contentBack(
                 modifier = Modifier
                     .padding(12.dp)
                     .size(100.dp),
-                //shape = RectangleShape,
-                //elevation = 6.dp
             ) {
                 Image(
                     painterResource(R.drawable.snake),
@@ -243,15 +160,6 @@ fun contentBack(
                         .clip(RoundedCornerShape(10.dp))
                         .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp)
                         ))
-                /*
-                AsyncImage(
-                    model = movie.images[0],
-                    contentDescription = "Movie poster",
-                    modifier = Modifier.clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
-
-                 */
             }
 
             Column() {
@@ -286,7 +194,6 @@ fun contentBack(
                     content()
                 }
             }
-
         }
     }
 }
@@ -311,43 +218,10 @@ fun singleTopicHomeScreen(
         front = {
             //content for front
                 contentFront()
-            /*
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Red),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "Front",
-                    style = MaterialTheme.typography.h3,
-                    color = Color.White
-                )
-            }
-
-             */
         },
         back = {
             //content for back
                contentBack()
-
-
-
-            /*
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Blue),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "Back",
-                    style = MaterialTheme.typography.h3,
-                    color = Color.White
-                )
-            }
-
-             */
         },
         topic = getTopics()[0]
     )
@@ -403,50 +277,3 @@ fun FlipCard(
         }
     }
 }
-/*
-//TestCode
-@Composable
-fun testFun() {
-    var cardFace by remember {
-        mutableStateOf(CardFace.Front)
-    }
-    FlipCard(cardFace = cardFace,
-        onClick = { cardFace = cardFace.next },
-        modifier = Modifier
-            .fillMaxWidth(.5f)
-            .aspectRatio(1f),
-        front = {
-            //content for front
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Red),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "Front",
-                    style = MaterialTheme.typography.h3,
-                    color = Color.White
-                )
-            }
-        },
-        back = {
-            //content for back
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Blue),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "Back",
-                    style = MaterialTheme.typography.h3,
-                    color = Color.White
-                )
-            }
-        },
-        topic = getTopics()[0]
-    )
-
-}
-*/
