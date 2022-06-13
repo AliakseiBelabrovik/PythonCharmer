@@ -40,11 +40,15 @@ fun FavoriteIcon(
     onFavClicked: (Topic) -> Unit = {},
 ){
     IconButton(
-        modifier = Modifier.width(80.dp),
+        modifier = Modifier.width(80.dp)
+            .offset(x = 15.dp, y = (-5).dp)
+            .size(50.dp),
         onClick = { onFavClicked(topic) }
     ) {
         Icon(
-            tint = MaterialTheme.colors.secondary,
+            tint = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .size(50.dp),
             imageVector =
             if (isFav) Icons.Default.Favorite
             else Icons.Default.FavoriteBorder,

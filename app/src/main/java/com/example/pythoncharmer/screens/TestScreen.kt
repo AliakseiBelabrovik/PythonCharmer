@@ -366,22 +366,9 @@ private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPr
                 modifier = Modifier
                     .padding(vertical = 20.dp)
                     .align(Alignment.Center)
-            )
-
-            IconButton(
-                onClick = onBackPressed,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp, vertical = 20.dp)
-                    .align(Alignment.CenterEnd)
-            ) {
-                Icon(
-                    Icons.Filled.Close,
-                    contentDescription = stringResource(id = R.string.asker_cancel_description),
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
+                    )
         }
+    }
 
         val animatedProgress by animateFloatAsState(
             targetValue = (questionIndex + 1) / totalQuestionsCount.toFloat(),
@@ -395,7 +382,6 @@ private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPr
             backgroundColor = if (!isSystemInDarkTheme()) Color.Black.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.24f)
         )
     }
-}
 
 @Composable
 private fun TopAppBarTitle(questionIndex: Int, totalQuestionsCount: Int, modifier: Modifier = Modifier) {
@@ -415,7 +401,7 @@ private fun TopAppBarTitle(questionIndex: Int, totalQuestionsCount: Int, modifie
     Text(
         text = text,
         style = MaterialTheme.typography.caption,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
