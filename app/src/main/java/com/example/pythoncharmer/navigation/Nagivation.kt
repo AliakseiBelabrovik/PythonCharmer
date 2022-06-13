@@ -9,18 +9,21 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.TopicType
-import com.example.pythoncharmer.screens.BookMarksScreen
-import com.example.pythoncharmer.screens.HomeScreen
-import com.example.pythoncharmer.screens.TestScreen
-import com.example.pythoncharmer.screens.StudyLinksScreen
+import com.example.pythoncharmer.screens.*
 import com.example.pythoncharmer.view_models.BookMarksViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val bookMarksViewModel: BookMarksViewModel = viewModel()
-    NavHost(navController = navController, startDestination = AppScreens.HomeScreen.value) {
-        composable(AppScreens.HomeScreen.value) { HomeScreen(navController = navController,bookMarksViewModel) }
+    NavHost(navController = navController, startDestination = AppScreens.SplashScreen.value) {
+
+        composable(route= AppScreens.SplashScreen.value){
+            SplashScreen(navController)
+        }
+        composable(AppScreens.HomeScreen.value) {
+            HomeScreen(navController = navController,bookMarksViewModel)
+        }
         composable(route = AppScreens.BookmarksScreen.value) {
             BookMarksScreen(navController, viewModel = bookMarksViewModel)
         }
