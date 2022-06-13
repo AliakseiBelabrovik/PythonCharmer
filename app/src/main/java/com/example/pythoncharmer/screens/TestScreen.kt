@@ -63,14 +63,6 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
     },
         content = { innerPadding ->
             if (topic != null) {
-                //MainContent(topic = topic, navController = navController)
-                /*
-                 QuizTopAppBar(
-                    questionIndex = questionState.questionIndex,
-                    totalQuestionsCount = questionState.totalQuestions,
-                    onBackPressed = onBackPressed
-                )
-                 */
                 Column() {
                     QuizTopAppBar(
                         questionIndex = currentState.value.currentQuestionIndex,
@@ -86,8 +78,7 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                                 isChecked = isChecked,
                                 answerId = answerId
                             )
-                            //questionState.enableNext = true
-                            //changes colors, change buttons?
+                            testScreenViewModel.changeColorToNeutral()
                         },
                         modifier = Modifier
                         .fillMaxSize()
@@ -104,56 +95,23 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 onCheckPressed = {
                     testScreenViewModel.checkIfCorrect()
                 },
-                onNextPressed = {
-                    testScreenViewModel.goToNextQuestion()
-                    Log.d( "After pressing next", "The current question is now: " + currentState.value.questions[currentState.value.currentQuestionIndex].questionText )
-                },
-                onDontKnowPressed = {
+                onNavigateToTutorial = {
                     if (topic != null) {
                         navController.navigate("${AppScreens.StudyLinksScreen.value}/${topic.id}")
                     }
+
+                },
+                onNextPressed = {
+                    testScreenViewModel.goToNextQuestion()
+                },
+                onDontKnowPressed = {
+                    testScreenViewModel.showCorrectAnswer()
                 }
-                )
+            )
         }
     )
 }
 
-/*
- Surface(modifier = Modifier.supportWideScreen()) {
-        Scaffold(
-            topBar = {
-                QuizTopAppBar(
-                    questionIndex = questionState.questionIndex,
-                    totalQuestionsCount = questionState.totalQuestions,
-                    onBackPressed = onBackPressed
-                )
-            },
-            content = { innerPadding ->
-                QuestionContent(
-                    question = questionState.question,
-                    selectedAnswer = questionState.givenAnswerId,
-                    onAnswer = {
-                        questionState.givenAnswerId = it.id
-                        questionState.enableNext = true
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                )
-            },
-            bottomBar = {
-                NavigationButtons(
-                    questionState = questionState,
-                    onPreviousPressed = { questions.currentQuestionIndex-- },
-                    onNextPressed = { questions.currentQuestionIndex++ },
-                    onDonePressed = onDonePressed
-                )
-            }
-        )
-    }
-*
-
- */
 @Composable
 fun QuestionContent(
     question : Question,
@@ -187,7 +145,6 @@ fun QuestionContent(
         }
     }
 }
-
 
 @Composable
 fun QuestionTitle( questionTitle : String, feedbackColor : String ) {
@@ -241,11 +198,18 @@ fun SingleChoiceQuestion(
                 onAnswerSelected(true, radioOptions.indexOf(answer))
             }
 
-            val optionSelected = radioOptions.indexOf(answer) == selectedOption
+            var optionSelected = (radioOptions.indexOf(answer) == selectedOption) //or
+                    //(question.showCorrectAnswer && question.correctAnswerId.contains(answer.answerId) )
+
+            if(question.showCorrectAnswer) {
+                optionSelected = false
+                optionSelected = question.correctAnswerId.contains(answer.answerId)
+            }
+
             val answerBorderColor = if (optionSelected) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.5f)
-                } else if (question.feedbackColor == "RED") {
+                } else if (question.convertColorBackToNeutral && question.feedbackColor == "RED") {
                     Color.Red.copy(alpha = 0.5f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.5f)
@@ -256,7 +220,7 @@ fun SingleChoiceQuestion(
             val answerBackgroundColor = if (optionSelected) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.12f)
-                } else if (question.feedbackColor == "RED") {
+                } else if (question.convertColorBackToNeutral && question.feedbackColor == "RED") {
                     Color.Red.copy(alpha = 0.12f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.12f)
@@ -277,7 +241,8 @@ fun SingleChoiceQuestion(
                         .fillMaxWidth()
                         .selectable(
                             selected = optionSelected,
-                            onClick = onClickHandle
+                            onClick = onClickHandle,
+                            enabled = !question.enableNext
                         )
                         .background(answerBackgroundColor)
                         .padding(vertical = 16.dp, horizontal = 16.dp)
@@ -292,7 +257,8 @@ fun SingleChoiceQuestion(
                         onClick = onClickHandle,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = MaterialTheme.colors.primary
-                        )
+                        ),
+                        enabled = !question.enableNext
                     )
                 }
             }
@@ -322,19 +288,31 @@ fun MultipleChoiceQuestion(
                 //onOptionSelected(radioOptions.indexOf(answer))
                 onAnswerSelected(isChecked.value, question.answers.indexOf(item))
             }
+            if (question.showCorrectAnswer) {
+                isChecked.value = false
+                isChecked.value = question.correctAnswerId.contains(question.answers.indexOf(item))
+            }
 
-            val answerBorderColor = if (isChecked.value) {
+            val answerBorderColor = if (isChecked.value //or
+                //(question.showCorrectAnswer && question.correctAnswerId.contains(question.answers.indexOf(item)) )
+            ) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.5f)
+                } else if (question.convertColorBackToNeutral && question.feedbackColor == "RED") {
+                    Color.Red.copy(alpha = 0.5f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.5f)
                 }
             } else {
                 MaterialTheme.colors.onSurface.copy(alpha = 0.12f)
             }
-            val answerBackgroundColor = if (isChecked.value) {
+            val answerBackgroundColor = if (isChecked.value //or
+                //(question.showCorrectAnswer && question.correctAnswerId.contains(question.answers.indexOf(item)) )
+            ) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.12f)
+                } else if (question.convertColorBackToNeutral && question.feedbackColor == "RED") {
+                    Color.Red.copy(alpha = 0.12f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.12f)
                 }
@@ -353,11 +331,13 @@ fun MultipleChoiceQuestion(
                     modifier = Modifier
                         .fillMaxWidth()
                         .selectable(
-                            selected = isChecked.value,
+                            selected = isChecked.value or //or contains(item.answerId)
+                                    (question.showCorrectAnswer && question.correctAnswerId.contains(question.answers.indexOf(item)) ),
                             onClick = {
                                 isChecked.value = !isChecked.value
                                 onClickHandle()
-                            }
+                            },
+                            enabled = !question.enableNext
                         )
                         .background(answerBackgroundColor)
                         .padding(vertical = 16.dp, horizontal = 16.dp)
@@ -367,14 +347,15 @@ fun MultipleChoiceQuestion(
                         text = item.answerText
                     )
                     Checkbox(
-                        checked = isChecked.value,
+                        checked = isChecked.value or
+                                (question.showCorrectAnswer && question.correctAnswerId.contains(question.answers.indexOf(item)) ),
                         onCheckedChange = {
                             if (it) {
                                 onClickHandle()
                             }
                             isChecked.value = it
                         },
-                        enabled = true,
+                        enabled = !question.enableNext,
                         colors = CheckboxDefaults.colors(MaterialTheme.colors.primary)
                     )
                 }
@@ -452,6 +433,7 @@ private fun NavigationButtons(
     showDone : Boolean,
     question: Question,
     onCheckPressed: () -> Unit,
+    onNavigateToTutorial: () -> Unit,
     onNextPressed: () -> Unit,
     onDontKnowPressed: () -> Unit
 ) {
@@ -468,10 +450,18 @@ private fun NavigationButtons(
                 modifier = Modifier
                     .weight(1f)
                     .height(48.dp),
-                enabled = !enableNext,
-                onClick = onCheckPressed
+                enabled = question.showCorrectAnswer || !enableNext,
+                onClick = if (question.showCorrectAnswer)
+                    onNavigateToTutorial
+                else
+                    onCheckPressed
             ) {
-                Text(text = stringResource(id = R.string.asker_check_button))
+                if(question.showCorrectAnswer) {
+                    Text(text = stringResource(id = R.string.asker_tutorial))
+                } else {
+                    Text(text = stringResource(id = R.string.asker_check_button))
+                }
+
             }
 
             Spacer(modifier = Modifier.width(16.dp))

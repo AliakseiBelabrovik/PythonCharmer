@@ -5,4 +5,5 @@
     <string name="asker_dont_know">Don\'t know</string>
     <string name="asker_nav_next_question">Next</string>
     <string name="asker_check_button">Check</string>
+    <string name="asker_tutorial">See tutorial</string>
 </resources>

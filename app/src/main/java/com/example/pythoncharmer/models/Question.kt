@@ -15,6 +15,8 @@ data class Question(
     var givenAnswerIds by mutableStateOf(arrayListOf<Int>())
     var enableNext by mutableStateOf(false)
     var feedbackColor by mutableStateOf("NEUTRAL")
+    var convertColorBackToNeutral by mutableStateOf(false)
+    var showCorrectAnswer by mutableStateOf(false)
 }
 
 val questionsTopicComments = listOf(

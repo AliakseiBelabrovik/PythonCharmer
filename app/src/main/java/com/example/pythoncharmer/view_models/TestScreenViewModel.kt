@@ -50,27 +50,12 @@ class TestScreenViewModel(
         if (_viewState.value.questions[_viewState.value.currentQuestionIndex].questionType == QuestionType.multipleChoice) {
             if (isChecked) {
                 _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.add(answerId)
-                Log.d("Adding the answer",
-                    "Adding the answer " +
-                            _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
-                Log.d("The given answers are",
-                    "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
             } else if (_viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.contains(answerId)) {
                 _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.remove(answerId)
-                Log.d("Removing the answer",
-                    "Removing the answer " +
-                            _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
-                Log.d("The given answers are",
-                    "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
             }
         } else {
             _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.clear()
             _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds.add(answerId)
-            Log.d("Changed answer",
-                "The answer selected is " +
-                        _viewState.value.questions[_viewState.value.currentQuestionIndex].answers[answerId].answerText)
-            Log.d("The given answers are",
-                "The given answers are " + _viewState.value.questions[_viewState.value.currentQuestionIndex].givenAnswerIds )
         }
     }
 
@@ -95,8 +80,21 @@ class TestScreenViewModel(
         ) {
             _viewState.value.questions[_viewState.value.currentQuestionIndex].enableNext = true
             _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "GREEN"
+            viewState.value.questions[_viewState.value.currentQuestionIndex].convertColorBackToNeutral = false
         } else {
+            _viewState.value.questions[_viewState.value.currentQuestionIndex].convertColorBackToNeutral = true
             _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "RED"
         }
+    }
+
+    fun changeColorToNeutral() {
+        viewState.value.questions[_viewState.value.currentQuestionIndex].convertColorBackToNeutral = false
+    }
+
+    fun showCorrectAnswer() {
+        _viewState.value.questions[_viewState.value.currentQuestionIndex].enableNext = true
+        _viewState.value.questions[_viewState.value.currentQuestionIndex].showCorrectAnswer = true
+        _viewState.value.questions[_viewState.value.currentQuestionIndex].feedbackColor = "GREEN"
+        viewState.value.questions[_viewState.value.currentQuestionIndex].convertColorBackToNeutral = false
     }
 }
