@@ -166,7 +166,7 @@ fun QuestionContent(
             QuestionTitle(questionTitle = question.questionText, question.feedbackColor)
             Spacer(modifier = Modifier.height(24.dp))
 
-            if(question.questionType == QuestionType.singeleChoice) {
+            if(question.questionType == QuestionType.singleChoice) {
                 SingleChoiceQuestion(
                     question = question,
                     selectedAnswerId = -1,

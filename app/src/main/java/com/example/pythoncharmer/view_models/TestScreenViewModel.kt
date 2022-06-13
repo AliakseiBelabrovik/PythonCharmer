@@ -3,7 +3,6 @@ package com.example.pythoncharmer.view_models
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pythoncharmer.models.FeedbackColor
 import com.example.pythoncharmer.models.InMemoryQuestionService
 import com.example.pythoncharmer.models.QuestionType
 import com.example.pythoncharmer.models.QuestionsXRepository

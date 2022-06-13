@@ -28,7 +28,7 @@ val questionsTopicComments = listOf(
             Answer("<!--This is a comment-->", 3),
         ),
         listOf(0),
-        QuestionType.singeleChoice,
+        QuestionType.singleChoice,
         1
     ),
     Question(
@@ -40,8 +40,8 @@ val questionsTopicComments = listOf(
             Answer("\"\"\"print(\"Hello World!\")\"\"\"", 2),
             Answer("<!--This is a comment-->", 3)
         ),
-        listOf(32),
-        QuestionType.singeleChoice,
+        listOf(2),
+        QuestionType.singleChoice,
         1
     ),
     Question(
@@ -54,7 +54,7 @@ val questionsTopicComments = listOf(
             Answer("#myName = \"Neo\"\n#my_age = 37", 3)
         ),
         listOf(0),
-        QuestionType.singeleChoice,
+        QuestionType.singleChoice,
     1
     ),
     Question(
@@ -67,7 +67,7 @@ val questionsTopicComments = listOf(
             Answer("what?", 3)
         ),
         listOf(0),
-        QuestionType.singeleChoice,
+        QuestionType.singleChoice,
         1
     )
 )
@@ -96,7 +96,7 @@ val questionsTopicVariables = listOf(
             Answer("False", 1)
         ),
         listOf(1),
-        QuestionType.singeleChoice,
+        QuestionType.singleChoice,
         2
     ),
     Question(
@@ -110,7 +110,7 @@ val questionsTopicVariables = listOf(
 
         ),
         listOf(0),
-        QuestionType.singeleChoice,
+        QuestionType.singleChoice,
         2
     )
 )
