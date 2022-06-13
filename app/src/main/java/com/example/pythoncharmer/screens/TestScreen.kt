@@ -31,6 +31,7 @@ import com.example.pythoncharmer.models.*
 import com.example.pythoncharmer.view_models.TestScreenViewModel
 import com.example.pythoncharmer.view_states.TestScreenViewState
 import com.example.pythoncharmer.models.Topic
+import com.example.pythoncharmer.navigation.AppScreens
 
 @Composable
 fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
@@ -106,9 +107,13 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 onNextPressed = {
                     testScreenViewModel.goToNextQuestion()
                     Log.d( "After pressing next", "The current question is now: " + currentState.value.questions[currentState.value.currentQuestionIndex].questionText )
-                }) {
-                //TODO on don't know pressed
-            }
+                },
+                onDontKnowPressed = {
+                    if (topic != null) {
+                        navController.navigate("${AppScreens.StudyLinksScreen.value}/${topic.id}")
+                    }
+                }
+                )
         }
     )
 }
@@ -240,6 +245,8 @@ fun SingleChoiceQuestion(
             val answerBorderColor = if (optionSelected) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.5f)
+                } else if (question.feedbackColor == "RED") {
+                    Color.Red.copy(alpha = 0.5f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.5f)
                 }
@@ -249,6 +256,8 @@ fun SingleChoiceQuestion(
             val answerBackgroundColor = if (optionSelected) {
                 if (question.feedbackColor == "GREEN") {
                     Color.Green.copy(alpha = 0.12f)
+                } else if (question.feedbackColor == "RED") {
+                    Color.Red.copy(alpha = 0.12f)
                 } else {
                     MaterialTheme.colors.primary.copy(alpha = 0.12f)
                 }
