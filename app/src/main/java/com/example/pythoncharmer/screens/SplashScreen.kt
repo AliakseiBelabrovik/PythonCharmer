@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.pythoncharmer.R
 import com.example.pythoncharmer.navigation.AppScreens
@@ -54,12 +55,6 @@ fun Splash(alpha: Float){
             .background(Purple700),
         contentAlignment = Alignment.Center
     ){
-        /*Icon(
-            modifier = Modifier.size(120.dp).alpha(alpha),
-            imageVector = Icons.Default.Home,
-            contentDescription = "HomeScreen",
-            tint= Color.White
-        )*/
         Column(
             verticalArrangement = Arrangement.Center,
         ) {
@@ -68,13 +63,14 @@ fun Splash(alpha: Float){
                 contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(120.dp)
+                    .offset(x = 25.dp)
+                    .size(200.dp)
                     .alpha(alpha)
                     .clip(RoundedCornerShape(10.dp))
                     .border(2.dp, Color.DarkGray, RoundedCornerShape(10.dp))
             )
             Spacer(modifier = Modifier.size(10.dp))
-            Text(text = "Welcome to PythonCharmer", color = Color.White)
+            Text(text = "Welcome to PythonCharmer", color = Color.White, fontSize = 20.sp)
         }
 
     }
