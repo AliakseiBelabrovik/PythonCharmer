@@ -5,5 +5,6 @@ enum class AppScreens( val value : String ) {
     HomeScreen("home_screen"),
     TestScreen("multiple_choice_screen"),
     BookmarksScreen("bookmarks_screen"),
+    AllQuestionsScreen("all_questions_screen"),
     StudyLinksScreen("study_links_screen")
 }

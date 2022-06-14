@@ -10,12 +10,14 @@ import androidx.navigation.navArgument
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.TopicType
 import com.example.pythoncharmer.screens.*
+import com.example.pythoncharmer.view_models.AllQuestionsViewModel
 import com.example.pythoncharmer.view_models.BookMarksViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val bookMarksViewModel: BookMarksViewModel = viewModel()
+    val allQuestionsViewModel: AllQuestionsViewModel = viewModel()
     NavHost(navController = navController, startDestination = AppScreens.SplashScreen.value) {
 
         composable(route= AppScreens.SplashScreen.value){
@@ -26,6 +28,9 @@ fun AppNavigation() {
         }
         composable(route = AppScreens.BookmarksScreen.value) {
             BookMarksScreen(navController, viewModel = bookMarksViewModel)
+        }
+        composable(route = AppScreens.AllQuestionsScreen.value) {
+            AllQuestionsScreen(navController, viewModel = allQuestionsViewModel)
         }
         composable(
             route = AppScreens.StudyLinksScreen.value+"/{TopicId}",// placeholder for arguments

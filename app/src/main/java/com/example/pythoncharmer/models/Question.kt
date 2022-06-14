@@ -142,6 +142,7 @@ val questionsTopicVariables = listOf(
 )
 
 val allQuestions = questionsTopicComments + questionsTopicVariables
+val shuffledQuestions = allQuestions.shuffled()
 
 
 

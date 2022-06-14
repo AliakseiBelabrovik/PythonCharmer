@@ -13,5 +13,9 @@ class InMemoryQuestionService : QuestionsXRepository {
         return allQuestions.filter { question -> question.topicId == topicId }
     }
 
+    override suspend fun fetchAllQuestions(): List<Question> {
+        return shuffledQuestions
+    }
+
 
 }

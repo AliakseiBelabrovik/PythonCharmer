@@ -10,4 +10,6 @@ interface QuestionsXRepository {
     suspend fun fetchQuestions() : List<Question>
 
     suspend fun fetchQuestionsById( topicId : Int ) : List<Question>
+
+    suspend fun fetchAllQuestions() : List<Question>
 }

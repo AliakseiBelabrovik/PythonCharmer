@@ -9,12 +9,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pythoncharmer.R
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.models.getTopics
 import com.example.pythoncharmer.navigation.AppScreens
@@ -47,6 +49,25 @@ fun HomeScreen(navController: NavController, viewModel: BookMarksViewModel) {
                                 )
                                 Text(
                                     text = "Bookmarks",
+                                    modifier = Modifier
+                                        .padding(4.dp)
+                                        .width(125.dp)
+                                )
+                            }
+                        }
+                        DropdownMenuItem(onClick = {
+                            navController.navigate(AppScreens.AllQuestionsScreen.value)
+                        }) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "All Questions",
+                                    modifier = Modifier.padding(4.dp)
+                                )
+                                Text(
+                                    text = "All Questions",
                                     modifier = Modifier
                                         .padding(4.dp)
                                         .width(125.dp)

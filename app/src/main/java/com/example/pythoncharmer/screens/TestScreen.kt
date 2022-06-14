@@ -357,7 +357,7 @@ fun MultipleChoiceQuestion(
 }
 
 @Composable
-private fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPressed: () -> Unit) {
+fun QuizTopAppBar(questionIndex: Int, totalQuestionsCount: Int, onBackPressed: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(modifier = Modifier.fillMaxWidth()) {
             TopAppBarTitle(
@@ -406,7 +406,7 @@ private fun TopAppBarTitle(questionIndex: Int, totalQuestionsCount: Int, modifie
 }
 
 @Composable
-private fun NavigationButtons(
+fun NavigationButtons(
     enableNext : Boolean,
     showDone : Boolean,
     question: Question,
