@@ -32,12 +32,18 @@ import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.navigation.AppScreens
 
 @Composable
-fun TestScreen(navController: NavController = rememberNavController(), topic : Topic?) {
-
+fun TestScreen(
+    navController: NavController = rememberNavController(),
+    topic : Topic?,
+    testScreenViewModel : TestScreenViewModel
+) {
+/*
     val testScreenViewModel : TestScreenViewModel = viewModel()
     if ( topic != null ) {
         testScreenViewModel.fetchQuestionsByTopicId( topicId = topic.id )
     }
+
+ */
     val currentState: State<TestScreenViewState> = testScreenViewModel.viewState.collectAsState()
 
     Scaffold(topBar = {
@@ -46,8 +52,13 @@ fun TestScreen(navController: NavController = rememberNavController(), topic : T
                 Icon(imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Arrow back",
                     modifier = Modifier.clickable {
+                        if(
+                            currentState.value.lastQuestion &&
+                            currentState.value.questions[currentState.value.currentQuestionIndex].enableNext
+                        ) {
+                            currentState.value.testFinished = true
+                        }
                         navController.navigateUp()
-                        //navController.popBackStack()
                     }
                 )
                 Spacer(modifier = Modifier.width(20.dp))

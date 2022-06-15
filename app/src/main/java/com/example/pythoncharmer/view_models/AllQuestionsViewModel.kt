@@ -23,18 +23,24 @@ class AllQuestionsViewModel(
         fetchAllQuestions()
     }
 
-    private fun fetchQuestions() {
-        viewModelScope.launch {
-            val questions = questionsXRepository.fetchQuestions()
-            _viewState.value = _viewState.value.copy(
-                questions = questions
-            )
-        }
-    }
-
     fun fetchAllQuestions() {
         viewModelScope.launch {
-            val questions = questionsXRepository.fetchAllQuestions();
+            val questions = if (_viewState.value.testFinished) {
+                _viewState.value.lastQuestion = false
+                _viewState.value.currentQuestionIndex = 0
+                _viewState.value.testFinished = false
+
+                questionsXRepository.fetchAllQuestions().shuffled().map { q ->
+                    q.givenAnswerIds = arrayListOf<Int>()
+                    q.enableNext = false;
+                    q.feedbackColor = "NEUTRAL"
+                    q.convertColorBackToNeutral = false
+                    q.showCorrectAnswer = false
+                    q
+                }
+            } else {
+                questionsXRepository.fetchAllQuestions();
+            }
             _viewState.value = _viewState.value.copy(
                 questions = questions
             )

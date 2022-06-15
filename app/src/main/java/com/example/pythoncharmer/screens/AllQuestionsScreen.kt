@@ -1,6 +1,7 @@
 package com.example.pythoncharmer.screens
 
 
+import android.app.PendingIntent.getActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,16 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.pythoncharmer.navigation.AppScreens
 import com.example.pythoncharmer.view_states.TestScreenViewState
 import com.example.pythoncharmer.view_models.AllQuestionsViewModel
 
 @Composable
-fun AllQuestionsScreen(navController: NavController = rememberNavController(), viewModel: AllQuestionsViewModel) {
+fun AllQuestionsScreen(navController: NavController = rememberNavController(), allQuestionsViewModel: AllQuestionsViewModel) {
 
-    val allQuestionsViewModel : AllQuestionsViewModel = viewModel()
     val currentState: State<TestScreenViewState> = allQuestionsViewModel.viewState.collectAsState()
 
     Scaffold(topBar = {
@@ -28,6 +30,13 @@ fun AllQuestionsScreen(navController: NavController = rememberNavController(), v
                 Icon(imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Arrow back",
                     modifier = Modifier.clickable {
+                        if(
+                            currentState.value.lastQuestion &&
+                            currentState.value.questions[currentState.value.currentQuestionIndex].enableNext
+                        ) {
+                            currentState.value.testFinished = true
+                        }
+
                         navController.navigateUp()
                         //navController.popBackStack()
                     }
@@ -35,7 +44,6 @@ fun AllQuestionsScreen(navController: NavController = rememberNavController(), v
                 Text(text = "All Questions",
                 modifier = Modifier.offset(x = 130.dp))
                 Spacer(modifier = Modifier.width(20.dp))
-
             }
         }
     },
@@ -72,6 +80,7 @@ fun AllQuestionsScreen(navController: NavController = rememberNavController(), v
                     allQuestionsViewModel.checkIfCorrect()
                 },
                 onNavigateToTutorial = {
+                    navController.navigate("${AppScreens.StudyLinksScreen.value}/${currentState.value.questions[currentState.value.currentQuestionIndex].topicId}")
                 },
                 onNextPressed = {
                     allQuestionsViewModel.goToNextQuestion()

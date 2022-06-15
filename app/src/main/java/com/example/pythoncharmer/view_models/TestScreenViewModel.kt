@@ -39,7 +39,22 @@ class TestScreenViewModel(
 
     fun fetchQuestionsByTopicId( topicId : Int ) {
         viewModelScope.launch {
-            val questions = questionsXRepository.fetchQuestionsById( topicId = topicId );
+            val questions = if (_viewState.value.testFinished) {
+                _viewState.value.lastQuestion = false
+                _viewState.value.currentQuestionIndex = 0
+                _viewState.value.testFinished = false
+
+                questionsXRepository.fetchQuestionsById( topicId = topicId ).map { q ->
+                    q.givenAnswerIds = arrayListOf<Int>()
+                    q.enableNext = false;
+                    q.feedbackColor = "NEUTRAL"
+                    q.convertColorBackToNeutral = false
+                    q.showCorrectAnswer = false
+                    q
+                }
+            } else {
+                questionsXRepository.fetchQuestionsById( topicId = topicId )
+            }
             _viewState.value = _viewState.value.copy(
                 questions = questions
             )

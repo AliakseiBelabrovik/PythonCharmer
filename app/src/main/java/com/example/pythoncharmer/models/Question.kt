@@ -55,8 +55,8 @@ val questionsTopicComments = listOf(
             Answer("### myName = \"Neo\"\nmy_age = 37 ###", 2),
             Answer("# myName = \"Neo\"\n# my_age = 37", 3)
         ),
-        listOf(0,3),
-        QuestionType.multipleChoice,
+        listOf(0),
+        QuestionType.singleChoice,
     1
     ),
     Question(
@@ -112,7 +112,7 @@ val questionsTopicVariables = listOf(
             Answer("x := 100", 3),
             Answer("x <- 100", 4)
         ),
-        listOf(0),
+        listOf(2),
         QuestionType.singleChoice,
         2
     ),
@@ -140,8 +140,8 @@ val questionsTopicVariables = listOf(
         2
     ),
 )
-
-val allQuestions = questionsTopicComments + questionsTopicVariables
+val allQuestions = (questionsTopicComments + questionsTopicVariables).map { it.copy() }
+//val allQuestions = questionsTopicComments + questionsTopicVariables
 val shuffledQuestions = allQuestions.shuffled()
 
 

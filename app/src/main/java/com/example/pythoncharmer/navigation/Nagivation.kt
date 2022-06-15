@@ -12,12 +12,14 @@ import com.example.pythoncharmer.models.TopicType
 import com.example.pythoncharmer.screens.*
 import com.example.pythoncharmer.view_models.AllQuestionsViewModel
 import com.example.pythoncharmer.view_models.BookMarksViewModel
+import com.example.pythoncharmer.view_models.TestScreenViewModel
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val bookMarksViewModel: BookMarksViewModel = viewModel()
     val allQuestionsViewModel: AllQuestionsViewModel = viewModel()
+    val testScreenViewModel : TestScreenViewModel = viewModel()
     NavHost(navController = navController, startDestination = AppScreens.SplashScreen.value) {
 
         composable(route= AppScreens.SplashScreen.value){
@@ -30,7 +32,8 @@ fun AppNavigation() {
             BookMarksScreen(navController, viewModel = bookMarksViewModel)
         }
         composable(route = AppScreens.AllQuestionsScreen.value) {
-            AllQuestionsScreen(navController, viewModel = allQuestionsViewModel)
+            allQuestionsViewModel.fetchAllQuestions()
+            AllQuestionsScreen(navController, allQuestionsViewModel = allQuestionsViewModel)
         }
         composable(
             route = AppScreens.StudyLinksScreen.value+"/{TopicId}",// placeholder for arguments
@@ -42,6 +45,7 @@ fun AppNavigation() {
                 topicID = navBackStackEntry.arguments?.getInt("TopicId") // pass the value of movieId argument to the DetailScreen composable
             )
         }
+
         composable(
             route= "${AppScreens.TestScreen.value}/{topic}",
             arguments = listOf(
@@ -50,9 +54,11 @@ fun AppNavigation() {
                 }
             )
         ) { navBackStackEntry ->
+            testScreenViewModel.fetchQuestionsByTopicId(navBackStackEntry.arguments?.getParcelable<Topic>("topic")?.id.toString().toInt())
             TestScreen(
                 navController = navController,
-                topic = navBackStackEntry.arguments?.getParcelable<Topic>("topic")
+                topic = navBackStackEntry.arguments?.getParcelable<Topic>("topic"),
+                testScreenViewModel = testScreenViewModel
             )
         }
     }
