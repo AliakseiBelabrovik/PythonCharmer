@@ -21,7 +21,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.pythoncharmer.R
@@ -30,21 +29,26 @@ import com.example.pythoncharmer.view_models.TestScreenViewModel
 import com.example.pythoncharmer.view_states.TestScreenViewState
 import com.example.pythoncharmer.models.Topic
 import com.example.pythoncharmer.navigation.AppScreens
+import com.example.pythoncharmer.widgets.AlertDialogFinished
 
 @Composable
 fun TestScreen(
     navController: NavController = rememberNavController(),
     topic : Topic?,
     testScreenViewModel : TestScreenViewModel
-) {
-/*
-    val testScreenViewModel : TestScreenViewModel = viewModel()
-    if ( topic != null ) {
-        testScreenViewModel.fetchQuestionsByTopicId( topicId = topic.id )
-    }
-
- */
+    ) {
     val currentState: State<TestScreenViewState> = testScreenViewModel.viewState.collectAsState()
+    val showDialogState : State<Boolean> = testScreenViewModel.showDialog.collectAsState()
+    AlertDialogFinished(
+        show = showDialogState.value,
+        onConfirm = testScreenViewModel::onDialogConfirm
+    )
+    if (currentState.value.lastQuestion &&
+        currentState.value.questions[currentState.value.currentQuestionIndex].enableNext &&
+        !showDialogState.value && !currentState.value.dialogAlertDisabled
+    ) {
+        testScreenViewModel.onOpenDialogClicked()
+    }
 
     Scaffold(topBar = {
         TopAppBar() {
@@ -87,8 +91,8 @@ fun TestScreen(
                             testScreenViewModel.changeColorToNeutral()
                         },
                         modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     )
                 }
             }
@@ -117,6 +121,7 @@ fun TestScreen(
         }
     )
 }
+
 
 @Composable
 fun QuestionContent(
@@ -334,7 +339,9 @@ fun MultipleChoiceQuestion(
                         .fillMaxWidth()
                         .selectable(
                             selected = isChecked.value or //or contains(item.answerId)
-                                    (question.showCorrectAnswer && question.correctAnswerId.contains(question.answers.indexOf(item)) ),
+                                    (question.showCorrectAnswer && question.correctAnswerId.contains(
+                                        question.answers.indexOf(item)
+                                    )),
                             onClick = {
                                 isChecked.value = !isChecked.value
                                 onClickHandle()

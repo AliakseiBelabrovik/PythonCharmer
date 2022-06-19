@@ -6,4 +6,7 @@
     <string name="asker_nav_next_question">Next</string>
     <string name="asker_check_button">Check</string>
     <string name="asker_tutorial">See tutorial</string>
+    <string name="alert_dialog_title">Congratulations!</string>
+    <string name="alert_dialog_text">"You have finished the test. "</string>
+    <string name="confirm_alert_dialog">OK</string>
 </resources>

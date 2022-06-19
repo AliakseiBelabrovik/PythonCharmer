@@ -9,6 +9,7 @@ import com.example.pythoncharmer.models.QuestionsXRepository
 import com.example.pythoncharmer.view_states.TestScreenViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AllQuestionsViewModel(
@@ -18,6 +19,19 @@ class AllQuestionsViewModel(
     private val _viewState = MutableStateFlow(TestScreenViewState())
     //this public state anybody can listen to
     val viewState : StateFlow<TestScreenViewState> = _viewState
+
+    //state of the AlertDialog
+    private val _showDialog = MutableStateFlow(false)
+    val showDialog : StateFlow<Boolean> = _showDialog.asStateFlow()
+
+    fun onOpenDialogClicked() {
+        _showDialog.value = true
+    }
+
+    fun onDialogConfirm() {
+        _showDialog.value = false
+        _viewState.value.dialogAlertDisabled = true
+    }
 
     init {
         fetchAllQuestions()
